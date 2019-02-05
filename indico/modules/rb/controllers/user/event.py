@@ -262,7 +262,7 @@ class RHRoomBookingEventNewBookingSimple(RHRoomBookingEventBase, RHRoomBookingNe
 
     def _make_confirm_form(self, *args, **kwargs):
         defaults = kwargs['defaults']
-        for key, value in _get_defaults_from_object(self.event).iteritems():
+        for key, value in _get_defaults_from_object(self.event).items():
             defaults[key] = value
         return RHRoomBookingNewBookingSimple._make_confirm_form(self, *args, **kwargs)
 
@@ -312,7 +312,7 @@ class RHRoomBookingEventNewBooking(RHRoomBookingEventBase, RHRoomBookingNewBooki
 
     def _get_select_room_form_defaults(self):
         defaults, _ = RHRoomBookingNewBooking._get_select_room_form_defaults(self)
-        for key, value in _get_defaults_from_object(self._assign_to or self.event).iteritems():
+        for key, value in _get_defaults_from_object(self._assign_to or self.event).items():
             defaults[key] = value
         return defaults, False
 

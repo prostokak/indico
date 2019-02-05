@@ -74,7 +74,7 @@ class FormattedSubjectSMTPHandler(logging.handlers.SMTPHandler):
             port = self.mailport
             if not port:
                 port = smtplib.SMTP_PORT
-            smtp = smtplib.SMTP(self.mailhost, port, timeout=self._timeout)
+            smtp = smtplib.SMTP(self.mailhost, port, timeout=self.timeout)
             msg = MIMEText(self.format(record), 'plain', 'utf-8')
             msg['From'] = self.fromaddr
             msg['To'] = ', '.join(self.toaddrs)
@@ -120,7 +120,7 @@ class Logger(object):
         data['incremental'] = False
         # Make the request ID available in all loggers
         data.setdefault('filters', {})['_add_request_id'] = {'()': AddRequestIDFilter}
-        for handler in data['handlers'].itervalues():
+        for handler in data['handlers'].values():
             handler.setdefault('filters', []).insert(0, '_add_request_id')
             if handler['class'] == 'logging.FileHandler' and handler['filename'][0] != '/':
                 # Make relative paths relative to the log dir
@@ -138,7 +138,7 @@ class Logger(object):
                            if handler['class'] == 'indico.core.logger.FormattedSubjectSMTPHandler' else
                            'Unexpected Exception occurred at {}')
                 handler.setdefault('subject', subject.format(config.WORKER_NAME))
-        for formatter in data['formatters'].itervalues():
+        for formatter in data['formatters'].values():
             # Make adding request info to log entries less ugly
             if formatter.pop('append_request_info', False):
                 assert '()' not in formatter

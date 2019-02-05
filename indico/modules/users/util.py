@@ -132,17 +132,17 @@ def get_linked_events(user, dt, limit=None):
         links.setdefault(event_id, set()).add('conference_manager')
     for event_id in get_events_created_by(user, dt):
         links.setdefault(event_id, set()).add('conference_creator')
-    for event_id, principal_roles in get_events_with_linked_sessions(user, dt).iteritems():
+    for event_id, principal_roles in get_events_with_linked_sessions(user, dt).items():
         links.setdefault(event_id, set()).update(principal_roles)
-    for event_id, principal_roles in get_events_with_linked_contributions(user, dt).iteritems():
+    for event_id, principal_roles in get_events_with_linked_contributions(user, dt).items():
         links.setdefault(event_id, set()).update(principal_roles)
-    for event_id, role in get_events_with_linked_event_persons(user, dt).iteritems():
+    for event_id, role in get_events_with_linked_event_persons(user, dt).items():
         links.setdefault(event_id, set()).add(role)
-    for event_id, roles in get_events_with_abstract_reviewer_convener(user, dt).iteritems():
+    for event_id, roles in get_events_with_abstract_reviewer_convener(user, dt).items():
         links.setdefault(event_id, set()).update(roles)
-    for event_id, roles in get_events_with_abstract_persons(user, dt).iteritems():
+    for event_id, roles in get_events_with_abstract_persons(user, dt).items():
         links.setdefault(event_id, set()).update(roles)
-    for event_id, roles in get_events_with_paper_roles(user, dt).iteritems():
+    for event_id, roles in get_events_with_paper_roles(user, dt).items():
         links.setdefault(event_id, set()).update(roles)
 
     if not links:
@@ -209,7 +209,7 @@ def build_user_search_query(criteria, exact=False, include_deleted=False, includ
             raise ValueError("'name' is not compatible with (first|last)_name")
         query = query.filter(_build_name_search(name.replace(',', '').split()))
 
-    for k, v in criteria.iteritems():
+    for k, v in criteria.items():
         query = query.filter(unaccent_match(getattr(User, k), v, exact))
 
     if favorites_first:
@@ -247,7 +247,7 @@ def search_users(exact=False, include_deleted=False, include_pending=False, exte
              objects for existing users.
     """
 
-    criteria = {key: value.strip() for key, value in criteria.iteritems() if value.strip()}
+    criteria = {key: value.strip() for key, value in criteria.items() if value.strip()}
 
     if not criteria:
         return set()
@@ -284,7 +284,7 @@ def search_users(exact=False, include_deleted=False, include_pending=False, exte
                 found_emails[ident.data['email'].lower()] = ident
                 found_identities[(ident.provider, ident.identifier)] = ident
 
-    return set(found_emails.viewvalues()) | system_user
+    return set(found_emails.values()) | system_user
 
 
 def get_user_by_email(email, create_pending=False):

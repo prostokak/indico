@@ -52,7 +52,7 @@ class AgreementPersonInfo(object):
     def identifier(self):
         data_string = None
         if self.data:
-            data_string = '-'.join('{}={}'.format(k, make_hashable(v)) for k, v in sorted(self.data.viewitems()))
+            data_string = '-'.join('{}={}'.format(k, make_hashable(v)) for k, v in sorted(self.data.items()))
         identifier = '{}:{}'.format(self.email, data_string or None)
         return sha1(identifier).hexdigest()
 
@@ -136,7 +136,7 @@ class AgreementDefinitionBase(object):
         :return: (everybody_signed, num_accepted, num_rejected)
         """
         people = cls.get_people(event)
-        identifiers = [p.identifier for p in people.itervalues()]
+        identifiers = [p.identifier for p in people.values()]
         query = event.agreements.filter(Agreement.type == cls.name, Agreement.identifier.in_(identifiers))
         num_accepted = query.filter(Agreement.accepted).count()
         num_rejected = query.filter(Agreement.rejected).count()

@@ -16,7 +16,7 @@
 
 from __future__ import absolute_import, unicode_literals
 
-import cPickle
+import pickle
 import os
 import tempfile
 from datetime import date
@@ -118,7 +118,7 @@ def store_failed_email(email, log_entry=None):
     prefix = 'failed-email-{}-'.format(date.today().isoformat())
     fd, name = tempfile.mkstemp(prefix=prefix, dir=config.TEMP_DIR)
     with os.fdopen(fd, 'wb') as f:
-        cPickle.dump((email, log_entry.id if log_entry else None), f)
+        pickle.dump((email, log_entry.id if log_entry else None), f)
     return name
 
 
@@ -126,7 +126,7 @@ def resend_failed_email(path):
     """Try re-sending an email that previously failed."""
     from indico.modules.events.logs import EventLogEntry
     with open(path, 'rb') as f:
-        email, log_entry_id = cPickle.load(f)
+        email, log_entry_id = pickle.load(f)
     log_entry = EventLogEntry.get(log_entry_id) if log_entry_id is not None else None
     do_send_email(email, log_entry)
     db.session.commit()

@@ -123,7 +123,7 @@ def configure_multipass_local(app):
     app.config['MULTIPASS_AUTH_PROVIDERS']['indico'] = {
         'type': IndicoAuthProvider,
         'title': 'Indico',
-        'default': not any(p.get('default') for p in app.config['MULTIPASS_AUTH_PROVIDERS'].itervalues())
+        'default': not any(p.get('default') for p in app.config['MULTIPASS_AUTH_PROVIDERS'].values())
     }
     app.config['MULTIPASS_IDENTITY_PROVIDERS']['indico'] = {
         'type': IndicoIdentityProvider,
@@ -300,7 +300,7 @@ def add_plugin_blueprints(app):
 
 
 def reject_nuls():
-    for key, values in request.args.iterlists():
+    for key, values in request.args.lists():
         if '\0' in key or any('\0' in x for x in values):
             raise BadRequest('NUL byte found in query data')
 

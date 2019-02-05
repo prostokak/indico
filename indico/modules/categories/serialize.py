@@ -17,7 +17,6 @@
 from __future__ import unicode_literals
 
 from io import BytesIO
-from itertools import ifilter
 
 import icalendar as ical
 from flask import session
@@ -64,7 +63,7 @@ def serialize_categories_ical(category_ids, user, event_filter=True, event_filte
         query = update_query(query)
     it = iter(query)
     if event_filter_fn:
-        it = ifilter(event_filter_fn, it)
+        it = filter(event_filter_fn, it)
     events = list(it)
     # make sure the parent categories are in sqlalchemy's identity cache.
     # this avoids query spam from `protection_parent` lookups

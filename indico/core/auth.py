@@ -32,7 +32,7 @@ class IndicoMultipass(Multipass):
     @property
     def default_local_auth_provider(self):
         """The default form-based auth provider."""
-        return next((p for p in self.auth_providers.itervalues() if not p.is_external and p.settings.get('default')),
+        return next((p for p in self.auth_providers.values() if not p.is_external and p.settings.get('default')),
                     None)
 
     @property
@@ -43,7 +43,7 @@ class IndicoMultipass(Multipass):
         is used in places where only a group name can be specified,
         such as legacy data or room ACLs.
         """
-        return next((p for p in self.identity_providers.itervalues()
+        return next((p for p in self.identity_providers.values()
                      if p.supports_groups and p.settings.get('default_group_provider')), None)
 
     @property
@@ -52,7 +52,7 @@ class IndicoMultipass(Multipass):
 
         This is the identity provider used to sync user data.
         """
-        return next((p for p in self.identity_providers.itervalues()
+        return next((p for p in self.identity_providers.values()
                      if p.supports_refresh and p.settings.get('synced_fields')), None)
 
     @property
@@ -77,11 +77,11 @@ class IndicoMultipass(Multipass):
 
     def _check_default_provider(self):
         # Warn if there is no default group provider
-        if not self.default_group_provider and any(p.supports_groups for p in self.identity_providers.itervalues()):
+        if not self.default_group_provider and any(p.supports_groups for p in self.identity_providers.values()):
             warn('There is no default group provider but you have providers with group support. '
                  'This will break legacy ACLs referencing external groups and room ACLs will use local group IDs.')
         # Ensure that there is maximum one sync provider
-        sync_providers = [p for p in self.identity_providers.itervalues()
+        sync_providers = [p for p in self.identity_providers.values()
                           if p.supports_refresh and p.settings.get('synced_fields')]
         if len(sync_providers) > 1:
             raise ValueError('There can only be one sync provider.')

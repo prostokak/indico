@@ -162,7 +162,7 @@ class RHAgreementManagerDetailsSend(RHAgreementManagerDetailsEmailBase):
 
     def _get_people(self):
         identifiers = set(request.form.getlist('references'))
-        return {k: v for k, v in self.definition.get_people_not_notified(self.event).iteritems()
+        return {k: v for k, v in self.definition.get_people_not_notified(self.event).items()
                 if v.email and v.identifier in identifiers}
 
     def _success_handler(self, form):
@@ -194,7 +194,7 @@ class RHAgreementManagerDetailsSendAll(RHAgreementManagerDetailsSend):
     dialog_template = 'events/agreements/dialogs/agreement_email_form_send_all.html'
 
     def _get_people(self):
-        return {k: v for k, v in self.definition.get_people_not_notified(self.event).iteritems() if v.email}
+        return {k: v for k, v in self.definition.get_people_not_notified(self.event).items() if v.email}
 
 
 class RHAgreementManagerDetailsRemindAll(RHAgreementManagerDetailsRemind):

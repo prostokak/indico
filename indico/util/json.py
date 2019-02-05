@@ -17,7 +17,7 @@
 from __future__ import absolute_import
 
 from datetime import date, datetime
-from UserDict import UserDict
+from collections import UserDict
 
 from speaklater import _LazyString
 

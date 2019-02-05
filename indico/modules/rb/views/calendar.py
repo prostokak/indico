@@ -114,7 +114,7 @@ class RoomBookingCalendarWidget(object):
         else:
             for dt in ReservationOccurrence.iter_start_time(self.start_dt, self.end_dt,
                                                             (self.repeat_frequency, self.repeat_interval)):
-                for offset in xrange(-self.flexible_days, self.flexible_days + 1):
+                for offset in range(-self.flexible_days, self.flexible_days + 1):
                     yield (dt + timedelta(days=offset)).date()
 
     def build_bars_data(self, show_empty_rooms=True, show_empty_days=True):
@@ -204,7 +204,7 @@ class RoomBookingCalendarWidget(object):
 
         for room in self.rooms:
             blocked_rooms = blocked_rooms_by_room.getlist(room.id)
-            for (start_dt, end_dt), candidates in self.candidates.iteritems():
+            for (start_dt, end_dt), candidates in self.candidates.items():
                 # Check if there's a blocking
                 for blocked_room in blocked_rooms:
                     blocking = blocked_room.blocking
@@ -230,7 +230,7 @@ class RoomBookingCalendarWidget(object):
                                              kind=Bar.PRECONCURRENT))
 
     def _produce_conflict_bars(self):
-        for candidates in self.candidates.itervalues():
+        for candidates in self.candidates.values():
             for candidate in candidates:
                 for occurrence in self.occurrences:
                     if candidate.overlaps(occurrence, skip_self=True):

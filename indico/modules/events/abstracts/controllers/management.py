@@ -146,7 +146,7 @@ class RHManageReviewingRoles(RHManageAbstractsBase):
             self.event.global_conveners = set(role_data['global_conveners'])
             self.event.global_abstract_reviewers = set(role_data['global_reviewers'])
 
-            for track, user_roles in role_data['track_roles'].viewitems():
+            for track, user_roles in role_data['track_roles'].items():
                 track.conveners = set(user_roles['convener'])
                 track.abstract_reviewers = set(user_roles['reviewer'])
 

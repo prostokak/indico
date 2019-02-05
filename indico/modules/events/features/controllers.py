@@ -43,7 +43,7 @@ class RHFeatures(RHFeaturesBase):
     def _make_form(self):
         form_class = type(b'FeaturesForm', (IndicoForm,), {})
         disallowed = get_disallowed_features(self.event)
-        for name, feature in sorted(get_feature_definitions().iteritems(), key=lambda x: x[1].friendly_name):
+        for name, feature in sorted(get_feature_definitions().items(), key=lambda x: x[1].friendly_name):
             if name in disallowed:
                 continue
             field = BooleanField(feature.friendly_name, widget=SwitchWidget(on_label=_('On'), off_label=_('Off')),

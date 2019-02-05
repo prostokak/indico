@@ -53,8 +53,6 @@ def _query_categ_events(categ, start_dt, end_dt):
 
 
 def _get_category_score(user, categ, attended_events, debug=False):
-    if debug:
-        print repr(categ)
     # We care about events in the whole timespan where the user attended some events.
     # However, this might result in some missed events e.g. if the user was not working for
     # a year and then returned. So we throw away old blocks (or rather adjust the start time
@@ -69,32 +67,24 @@ def _get_category_score(user, categ, attended_events, debug=False):
 
     # Favorite categories get a higher base score
     score = int(categ in user.favorite_categories)
-    if debug:
-        print '{0:+.3f} - initial'.format(score)
     # Attendance percentage goes to the score directly. If the attendance is high chances are good that the user
     # is either very interested in whatever goes on in the category or it's something he has to attend regularily.
     total = _query_categ_events(categ, first_event_date, last_event_date).count()
     if total:
         attended_block_event_count = sum(1 for e in attended_events if e.start_dt >= first_event_date)
         score += attended_block_event_count / total
-    if debug:
-        print '{0:+.3f} - attendance'.format(score)
     # If there are lots/few unattended events after the last attended one we also update the score with that
     total_after = _query_categ_events(categ, last_event_date + timedelta(days=1), None).count()
     if total_after < total * 0.05:
         score += 0.25
     elif total_after > total * 0.25:
         score -= 0.5
-    if debug:
-        print '{0:+.3f} - unattended new events'.format(score)
     # Lower the score based on how long ago the last attended event was if there are no future events
     # We start applying this modifier only if the event has been more than 40 days in the past to avoid
     # it from happening in case of monthly events that are not created early enough.
     days_since_last_event = (date.today() - last_event_date.date()).days
     if days_since_last_event > 40:
         score -= 0.025 * days_since_last_event
-    if debug:
-        print '{0:+.3f} - days since last event'.format(score)
     # For events in the future however we raise the score
     now_local = utc_to_server(now_utc())
     attending_future = (_query_categ_events(categ, now_local, last_event_date)
@@ -102,12 +92,8 @@ def _get_category_score(user, categ, attended_events, debug=False):
                         .all())
     if attending_future:
         score += 0.25 * len(attending_future)
-        if debug:
-            print '{0:+.3f} - future event count'.format(score)
         days_to_future_event = (attending_future[0].start_dt.date() - date.today()).days
         score += max(0.1, -(max(0, days_to_future_event - 2) / 4) ** (1 / 3) + 2.5)
-        if debug:
-            print '{0:+.3f} - days to next future event'.format(score)
     return score
 
 
@@ -115,10 +101,10 @@ def get_category_scores(user, debug=False):
     # XXX: check if we can add some more roles such as 'contributor' to assume attendance
     event_ids = set()
     event_ids.update(id_
-                     for id_, roles in get_events_with_abstract_persons(user).iteritems()
+                     for id_, roles in get_events_with_abstract_persons(user).items()
                      if 'abstract_submitter' in roles)
     event_ids.update(id_
-                     for id_, roles in get_events_with_linked_contributions(user).iteritems()
+                     for id_, roles in get_events_with_linked_contributions(user).items()
                      if 'contribution_submission' in roles)
     event_ids |= get_events_registered(user)
     event_ids |= get_events_with_submitted_surveys(user)
@@ -133,4 +119,4 @@ def get_category_scores(user, debug=False):
     for event in attended:
         categ_events[event.category].append(event)
     return dict((categ, _get_category_score(user, categ, events, debug))
-                for categ, events in categ_events.iteritems())
+                for categ, events in categ_events.items())

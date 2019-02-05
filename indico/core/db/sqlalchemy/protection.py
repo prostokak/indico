@@ -444,7 +444,7 @@ class ProtectionManagersMixin(ProtectionMixin):
                 new_permissions |= add_permissions
             if del_permissions:
                 new_permissions -= del_permissions
-        invalid_permissions = new_permissions - get_available_permissions(type(self)).viewkeys()
+        invalid_permissions = new_permissions - get_available_permissions(type(self)).keys()
         if invalid_permissions:
             raise ValueError('Invalid permissions: {}'.format(', '.join(invalid_permissions)))
         entry.permissions = sorted(new_permissions)

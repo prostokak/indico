@@ -445,7 +445,7 @@ class RHRegistrationsConfigBadges(RHRegistrationsActionBase):
         'A8': (5.2, 7.4),
     }
 
-    format_map_landscape = {name: (h, w) for name, (w, h) in format_map_portrait.iteritems()}
+    format_map_landscape = {name: (h, w) for name, (w, h) in format_map_portrait.items()}
 
     def _process_args(self):
         RHManageRegFormBase._process_args(self)
@@ -460,7 +460,7 @@ class RHRegistrationsConfigBadges(RHRegistrationsActionBase):
     def _get_format(self, tpl):
         from indico.modules.designer.pdf import PIXELS_CM
         format_map = self.format_map_landscape if tpl.data['width'] > tpl.data['height'] else self.format_map_portrait
-        return next((frm for frm, frm_size in format_map.iteritems()
+        return next((frm for frm, frm_size in format_map.items()
                      if (frm_size[0] == float(tpl.data['width']) / PIXELS_CM) and
                          frm_size[1] == float(tpl.data['height']) / PIXELS_CM), 'custom')
 
@@ -623,7 +623,7 @@ class RHRegistrationsExportAttachments(RHRegistrationsExportBase, ZipGeneratorMi
         return os.path.join(*self._adjust_path_length([regform_title, registrant_name, file_name]))
 
     def _iter_items(self, attachments):
-        for reg_attachments in attachments.itervalues():
+        for reg_attachments in attachments.values():
             for reg_attachment in reg_attachments:
                 yield reg_attachment
 

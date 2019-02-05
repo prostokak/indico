@@ -96,7 +96,7 @@ def _log_acl_changes(sender, obj, principal, entry, is_new, old_data, quiet, **k
 
     def _format_permissions(permissions):
         permissions = set(permissions)
-        return ', '.join(sorted(orig_string(p.friendly_name) for p in available_permissions.itervalues()
+        return ', '.join(sorted(orig_string(p.friendly_name) for p in available_permissions.values()
                                 if p.name in permissions))
 
     data = {}

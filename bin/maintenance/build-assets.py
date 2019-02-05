@@ -63,7 +63,7 @@ def _get_webpack_build_config(url_root='/'):
             'distURL': os.path.join(url_root, 'dist/')
         },
         'themes': {key: {'stylesheet': theme['stylesheet'], 'print_stylesheet': theme.get('print_stylesheet')}
-                   for key, theme in themes['definitions'].viewitems()
+                   for key, theme in themes['definitions'].items()
                    if set(theme) & {'stylesheet', 'print_stylesheet'}}
     }
 

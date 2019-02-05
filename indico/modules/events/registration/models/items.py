@@ -83,7 +83,7 @@ class PersonalDataType(int, IndicoEnum):
                 'data': {
                     'item_type': 'dropdown',
                     'with_extra_slots': False,
-                    'choices': [dict(title_item, id=unicode(uuid4()), caption=orig_string(t.title))
+                    'choices': [dict(title_item, id=str(uuid4()), caption=orig_string(t.title))
                                 for t in UserTitle if t]
                 }
             }),

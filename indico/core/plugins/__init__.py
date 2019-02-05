@@ -45,7 +45,7 @@ from indico.web.menu import SideMenuItem
 from indico.web.views import WPJinjaMixin
 
 
-class PluginCategory(unicode, IndicoEnum):
+class PluginCategory(str, IndicoEnum):
     search = _('Search')
     synchronization = _('Synchronization')
     payment = _('Payment')

@@ -84,14 +84,14 @@ def _upgrade_permissions():
         if booking_group:
             group_kwargs = _group_to_kwargs(booking_group)
             if group_kwargs is None:
-                print 'WARNING: Invalid booking group: {}'.format(booking_group)
+                print('WARNING: Invalid booking group: {}'.format(booking_group))
             else:
                 permission = 'prebook' if reservations_need_confirmation else 'book'
                 _create_acl_entry(conn, room_id, permissions={permission}, **group_kwargs)
         if manager_group:
             group_kwargs = _group_to_kwargs(manager_group)
             if group_kwargs is None:
-                print 'WARNING: Invalid manager group: {}'.format(manager_group)
+                print('WARNING: Invalid manager group: {}'.format(manager_group))
             else:
                 _create_acl_entry(conn, room_id, full_access=True, **group_kwargs)
 

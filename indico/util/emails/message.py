@@ -20,7 +20,7 @@ import mimetypes
 import os
 import random
 import time
-from cStringIO import StringIO
+from io import StringIO
 from email import charset as Charset
 from email import encoders as Encoders
 from email import generator, message_from_string

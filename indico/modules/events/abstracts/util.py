@@ -80,7 +80,7 @@ def generate_spreadsheet_from_abstracts(abstracts, static_item_ids, dynamic_item
         ('modified_dt', ('Modification date', lambda x: x.modified_dt if x.modified_dt else ''))
     ])
     field_names.extend(unique_col(item.title, item.id) for item in dynamic_items)
-    field_names.extend(title for name, (title, fn) in static_item_mapping.iteritems() if name in static_item_ids)
+    field_names.extend(title for name, (title, fn) in static_item_mapping.items() if name in static_item_ids)
     rows = []
     for abstract in abstracts:
         data = abstract.data_by_field
@@ -91,7 +91,7 @@ def generate_spreadsheet_from_abstracts(abstracts, static_item_ids, dynamic_item
         for item in dynamic_items:
             key = unique_col(item.title, item.id)
             abstract_dict[key] = data[item.id].friendly_data if item.id in data else ''
-        for name, (title, fn) in static_item_mapping.iteritems():
+        for name, (title, fn) in static_item_mapping.items():
             if name not in static_item_ids:
                 continue
             value = fn(abstract)
@@ -331,7 +331,7 @@ def get_events_with_abstract_reviewer_convener(user, dt=None):
     # global reviewer/convener
     mapping = {'global_abstract_reviewer_for_events': 'abstract_reviewer',
                'global_convener_for_events': 'track_convener'}
-    for rel, role in mapping.iteritems():
+    for rel, role in mapping.items():
         query = (Event.query.with_parent(user, rel)
                  .filter(Event.ends_after(dt), ~Event.is_deleted)
                  .options(load_only('id')))
@@ -340,7 +340,7 @@ def get_events_with_abstract_reviewer_convener(user, dt=None):
     # track reviewer/convener
     mapping = {'abstract_reviewer_for_tracks': 'abstract_reviewer',
                'convener_for_tracks': 'track_convener'}
-    for rel, role in mapping.iteritems():
+    for rel, role in mapping.items():
         query = (Track.query.with_parent(user, rel)
                  .join(Track.event)
                  .filter(Event.ends_after(dt), ~Event.is_deleted)

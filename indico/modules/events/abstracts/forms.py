@@ -325,8 +325,8 @@ class AbstractReviewForm(IndicoForm):
     @property
     def split_data(self):
         data = self.data
-        return {'questions_data': {k: v for k, v in data.iteritems() if k.startswith('question_')},
-                'review_data': {k: v for k, v in data.iteritems() if not k.startswith('question_')}}
+        return {'questions_data': {k: v for k, v in data.items() if k.startswith('question_')},
+                'review_data': {k: v for k, v in data.items() if not k.startswith('question_')}}
 
     @property
     def has_questions(self):
@@ -415,7 +415,7 @@ class EditEmailTemplateRuleForm(IndicoForm):
         self.rules.event = self.event
 
     def validate_rules(self, field):
-        dedup_data = {tuple((k, tuple(v)) for k, v in r.viewitems()) for r in field.data}
+        dedup_data = {tuple((k, tuple(v)) for k, v in r.items()) for r in field.data}
         if len(field.data) != len(dedup_data):
             raise ValidationError(_("There is a duplicate rule"))
 

@@ -18,7 +18,7 @@ from __future__ import unicode_literals
 
 import re
 from datetime import timedelta
-from types import NoneType
+NoneType = type(None)
 
 from wtforms.validators import EqualTo, Length, Regexp, StopValidation, ValidationError
 

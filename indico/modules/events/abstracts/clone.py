@@ -39,8 +39,8 @@ class AbstractSettingsCloner(EventCloner):
     @no_autoflush
     def run(self, new_event, cloners, shared_data):
         self._contrib_type_id_map = {old.id: new.id
-                                     for old, new in shared_data['contribution_types']['contrib_type_map'].iteritems()}
-        self._track_id_map = {old.id: new.id for old, new in shared_data['tracks']['track_map'].iteritems()}
+                                     for old, new in shared_data['contribution_types']['contrib_type_map'].items()}
+        self._track_id_map = {old.id: new.id for old, new in shared_data['tracks']['track_map'].items()}
         self._clone_settings(new_event)
         self._clone_email_templates(new_event)
         self._clone_review_questions(new_event)

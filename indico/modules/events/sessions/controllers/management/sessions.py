@@ -246,8 +246,8 @@ class RHManageSessionBlock(RHManageSessionBase):
         form = MeetingSessionBlockForm(obj=FormDefaults(**self._get_form_defaults()), event=self.event,
                                        session_block=self.session_block)
         if form.validate_on_submit():
-            session_data = {k[8:]: v for k, v in form.data.iteritems() if k in form.session_fields}
-            block_data = {k[6:]: v for k, v in form.data.iteritems() if k in form.block_fields}
+            session_data = {k[8:]: v for k, v in form.data.items() if k in form.session_fields}
+            block_data = {k[6:]: v for k, v in form.data.items() if k in form.block_fields}
             update_session(self.session, session_data)
             update_session_block(self.session_block, block_data)
             return jsonify_data(flash=False)

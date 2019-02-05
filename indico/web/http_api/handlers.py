@@ -24,7 +24,7 @@ import posixpath
 import re
 import time
 import urllib
-from urlparse import parse_qs
+from urllib.parse import parse_qs
 from uuid import UUID
 
 from flask import current_app, g, request, session
@@ -117,7 +117,7 @@ def handler(prefix, path):
     logger = Logger.get('httpapi')
     if request.method == 'POST':
         # Convert POST data to a query string
-        queryParams = [(key, [x.encode('utf-8') for x in values]) for key, values in request.form.iterlists()]
+        queryParams = [(key, [x.encode('utf-8') for x in values]) for key, values in request.form.lists()]
         query = urllib.urlencode(queryParams, doseq=1)
         # we only need/keep multiple values so we can properly validate the signature.
         # the legacy code below expects a dict with just the first value.
@@ -126,7 +126,7 @@ def handler(prefix, path):
         queryParams = {key: values[0] for key, values in queryParams}
     else:
         # Parse the actual query string
-        queryParams = dict((key, value.encode('utf-8')) for key, value in request.args.iteritems())
+        queryParams = dict((key, value.encode('utf-8')) for key, value in request.args.items())
         query = request.query_string
 
     apiKey = get_query_parameter(queryParams, ['ak', 'apikey'], None)
@@ -232,7 +232,7 @@ def handler(prefix, path):
             ttl = api_settings.get('cache_ttl')
             if ttl > 0:
                 cache.set(cacheKey, (result, extra, ts, complete, typeMap), ttl)
-    except HTTPAPIError, e:
+    except HTTPAPIError as e:
         error = e
         if e.getCode():
             responseUtil.status = e.getCode()

@@ -244,8 +244,8 @@ class PaperReviewForm(IndicoForm):
     @property
     def split_data(self):
         data = self.data
-        return {'questions_data': {k: v for k, v in data.iteritems() if k.startswith('question_')},
-                'review_data': {k: v for k, v in data.iteritems() if not k.startswith('question_')}}
+        return {'questions_data': {k: v for k, v in data.items() if k.startswith('question_')},
+                'review_data': {k: v for k, v in data.items() if not k.startswith('question_')}}
 
     @property
     def has_questions(self):

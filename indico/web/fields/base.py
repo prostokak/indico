@@ -114,7 +114,7 @@ class BaseField(object):
             setattr(self.object, field, data[field])
         self.object.field_type = self.name
         self.object.field_data = {name: value
-                                  for name, value in data.iteritems()
+                                  for name, value in data.items()
                                   if name not in self.common_settings and name != 'csrf_token'}
 
     def get_friendly_value(self, value):

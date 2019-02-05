@@ -46,7 +46,7 @@ def multi_choice_field():
 def _update_data(data, changes):
     data = dict(deepcopy(data))
     refs = {x['id']: x for x in data['choices']}
-    for id_, item_changes in changes.iteritems():
+    for id_, item_changes in changes.items():
         if id_ not in refs:
             entry = {'id': id_, 'places_limit': 0, 'is_billable': False, 'price': 0}
             entry.update(item_changes)

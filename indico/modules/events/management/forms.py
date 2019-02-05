@@ -272,7 +272,7 @@ class EventProtectionForm(IndicoForm):
 
     @classmethod
     def _create_coordinator_priv_fields(cls):
-        for name, title in sorted(COORDINATOR_PRIV_TITLES.iteritems(), key=itemgetter(1)):
+        for name, title in sorted(COORDINATOR_PRIV_TITLES.items(), key=itemgetter(1)):
             setattr(cls, name, BooleanField(title, widget=SwitchWidget(), description=COORDINATOR_PRIV_DESCS[name]))
             cls.priv_fields.add(name)
 

@@ -189,7 +189,7 @@ class RHParticipantList(RHRegistrationFormDisplayBase):
                     continue
                 tables.append(self._participant_list_table(regform))
             # There might be forms that have not been sorted by the user yet
-            tables += map(self._participant_list_table, regforms_dict.viewvalues())
+            tables += map(self._participant_list_table, regforms_dict.values())
 
         published = (RegistrationForm.query.with_parent(self.event)
                      .filter(RegistrationForm.publish_registrations_enabled)

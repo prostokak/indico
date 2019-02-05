@@ -309,7 +309,7 @@ class RHRoomBookingNewBookingBase(RHRoomBookingBase):
         ).options(ReservationOccurrence.NO_RESERVATION_USER_STRATEGY).all()
 
         candidates = {}
-        for days in xrange(-flexible_days, flexible_days + 1):
+        for days in range(-flexible_days, flexible_days + 1):
             offset = timedelta(days=days)
             series_start = start_dt + offset
             series_end = end_dt + offset
@@ -406,8 +406,8 @@ class RHRoomBookingNewBookingSimple(RHRoomBookingNewBookingBase):
         else:
             occurrences, candidates = self._get_all_occurrences([self._room.id], form)
             conflicts, pre_conflicts = self._get_all_conflicts(self._room, form)
-            candidate_days = {occ.date for candidate in candidates.itervalues() for occ in candidate}
-            conflicting_days = {occ.date for occ in conflicts.iterkeys()}
+            candidate_days = {occ.date for candidate in candidates.values() for occ in candidate}
+            conflicting_days = {occ.date for occ in conflicts.keys()}
             only_conflicts = candidate_days <= conflicting_days
 
         if form.validate_on_submit() and not form.submit_check.data:

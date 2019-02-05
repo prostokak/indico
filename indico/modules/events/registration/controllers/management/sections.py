@@ -68,9 +68,9 @@ class RHRegistrationFormModifySection(RHManageRegFormSectionBase):
 
     def _process_PATCH(self):
         changes = request.json['changes']
-        if set(changes.viewkeys()) > {'title', 'description'}:
+        if set(changes.keys()) > {'title', 'description'}:
             raise BadRequest
-        for field, value in changes.iteritems():
+        for field, value in changes.items():
             setattr(self.section, field, value)
         db.session.flush()
         logger.info('Section %s modified by %s: %s', self.section, session.user, changes)

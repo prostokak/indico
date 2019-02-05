@@ -54,7 +54,7 @@ class RegistrationInvitation(db.Model):
         index=True,
         unique=True,
         nullable=False,
-        default=lambda: unicode(uuid4())
+        default=lambda: str(uuid4())
     )
     #: The ID of the registration form
     registration_form_id = db.Column(

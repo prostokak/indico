@@ -100,7 +100,7 @@ class RHRoomBookingCreateModifyRoomBase(RHRoomBookingAdminBase):
                 form.bookable_hours[i].end.data = bt.end_time
 
         # Custom attributes, part 2
-        form._attribute_fields = [field_ for name, field_ in form._fields.iteritems() if name.startswith('attribute_')]
+        form._attribute_fields = [field_ for name, field_ in form._fields.items() if name.startswith('attribute_')]
 
         # Equipment
         form.available_equipment.query = EquipmentType.query.order_by(EquipmentType.name)
@@ -129,7 +129,7 @@ class RHRoomBookingCreateModifyRoomBase(RHRoomBookingAdminBase):
                            if form['attribute_{}'.format(attr.id)].data]
         # Bookable times
         room.bookable_hours = [BookableHours(start_time=bt['start'], end_time=bt['end'])
-                               for bt in form.bookable_hours.data if all(x is not None for x in bt.viewvalues())]
+                               for bt in form.bookable_hours.data if all(x is not None for x in bt.values())]
 
         # Nonbookable dates
         room.nonbookable_periods = [NonBookablePeriod(start_dt=nbd.start_dt, end_dt=nbd.end_dt)

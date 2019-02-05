@@ -33,7 +33,7 @@ pytest_plugins = 'indico.modules.oauth.testing.fixtures'
 
 @pytest.fixture
 def token_data():
-    return {'access_token': unicode(uuid4()),
+    return {'access_token': str(uuid4()),
             'expires_in': 3600,
             'refresh_token': '',
             'scope': 'api'}
@@ -77,7 +77,7 @@ def test_save_grant(mocker, freeze_time):
     request = MagicMock()
     request.scopes = 'api'
     request.redirect_uri = 'http://localhost:5000'
-    client_id = unicode(uuid4())
+    client_id = str(uuid4())
     code = {'code': 'foobar'}
     expires = datetime.utcnow() + timedelta(seconds=120)
     grant = save_grant(client_id, code, request)
@@ -161,7 +161,7 @@ def test_save_token_invalid_grant(dummy_request, token_data, grant_type):
 
 
 def test_save_token_no_application(dummy_application, dummy_request, token_data):
-    dummy_request.client.client_id = unicode(uuid4())
+    dummy_request.client.client_id = str(uuid4())
     assert not OAuthApplication.find(client_id=dummy_request.client.client_id).count()
     with pytest.raises(NoResultFound):
         save_token(token_data, dummy_request)

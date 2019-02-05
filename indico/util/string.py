@@ -84,20 +84,20 @@ LATEX_MATH_PLACEHOLDER = u"\uE000"
 
 
 def encode_if_unicode(s):
-    if isinstance(s, _LazyString) and isinstance(s.value, unicode):
-        s = unicode(s)
-    return s.encode('utf-8') if isinstance(s, unicode) else s
+    if isinstance(s, _LazyString) and isinstance(s.value, ustr):
+        s = str(s)
+    return s.encode('utf-8') if isinstance(s, str) else s
 
 
 def safe_upper(text):
-    if isinstance(text, unicode):
+    if isinstance(text, str):
         return text.upper()
     else:
         return text.decode('utf-8').upper().encode('utf-8')
 
 
 def remove_accents(text, reencode=True):
-    if not isinstance(text, unicode):
+    if not isinstance(text, str):
         text = text.decode('utf-8')
     result = u''.join((c for c in unicodedata.normalize('NFD', text) if unicodedata.category(c) != 'Mn'))
     if reencode:
@@ -107,6 +107,7 @@ def remove_accents(text, reencode=True):
 
 
 def fix_broken_string(text, as_unicode=False):
+    return text.decode() if isinstance(text, bytes) else text
     try:
         text = text.decode('utf-8')
     except UnicodeDecodeError:
@@ -119,7 +120,7 @@ def fix_broken_string(text, as_unicode=False):
 
 def to_unicode(text):
     """Converts a string to unicode if it isn't already unicode."""
-    return fix_broken_string(text, as_unicode=True) if isinstance(text, str) else unicode(text)
+    return fix_broken_string(text, as_unicode=True) if isinstance(text, bytes) else str(text)
 
 
 def remove_non_alpha(text):
@@ -127,7 +128,8 @@ def remove_non_alpha(text):
 
 
 def unicode_to_ascii(text):
-    if not isinstance(text, unicode):
+    return text  # XXX
+    if not isinstance(text, str):
         text = to_unicode(text)
     text = text.encode('translit/long')
     return text.encode('ascii', 'ignore')
@@ -161,11 +163,11 @@ def slugify(*args, **kwargs):
 
     value = u'-'.join(to_unicode(val) for val in args)
     value = value.encode('translit/long')
-    value = re.sub(ur'[^\w\s-]', u'', value).strip()
+    value = re.sub(r'[^\w\s-]', u'', value).strip()
 
     if lower:
         value = value.lower()
-    value = re.sub(ur'[-\s]+', u'-', value)
+    value = re.sub(r'[-\s]+', u'-', value)
     if maxlen:
         value = value[0:maxlen].rstrip(u'-')
 
@@ -173,12 +175,12 @@ def slugify(*args, **kwargs):
 
 
 def unicode_struct_to_utf8(obj):
-    if isinstance(obj, unicode):
+    if isinstance(obj, str):
         return obj.encode('utf-8', 'replace')
     elif isinstance(obj, list):
         return map(unicode_struct_to_utf8, obj)
     elif isinstance(obj, dict):
-        return {unicode_struct_to_utf8(k): unicode_struct_to_utf8(v) for k, v in obj.iteritems()}
+        return {unicode_struct_to_utf8(k): unicode_struct_to_utf8(v) for k, v in obj.items()}
     return obj
 
 
@@ -199,7 +201,7 @@ def truncate(text, max_size, ellipsis='...', encoding='utf-8'):
     """
     encode = False
 
-    if isinstance(text, str):
+    if isinstance(text, bytes):
         encode = True
         text = text.decode(encoding)
 
@@ -215,7 +217,7 @@ def truncate(text, max_size, ellipsis='...', encoding='utf-8'):
 def strip_tags(text):
     """Strip HTML tags and replace adjacent whitespace by one space."""
     encode = False
-    if isinstance(text, str):
+    if isinstance(text, bytes):
         encode = True
         text = text.decode('utf-8')
     text = do_striptags(text)
@@ -303,7 +305,7 @@ def validate_email(email):
 def validate_emails(emails):
     """Validate a space/semicolon/comma-separated list of email addresses."""
     emails = to_unicode(emails)
-    emails = re.split(ur'[\s;,]+', emails)
+    emails = re.split(r'[\s;,]+', emails)
     return all(validate_email(email) for email in emails if email)
 
 
@@ -344,7 +346,7 @@ def strip_whitespace(s):
     This utility is useful in cases where you might get None or
     non-string values such as WTForms filters.
     """
-    if isinstance(s, basestring):
+    if isinstance(s, str):
         s = s.strip()
     return s
 
@@ -355,9 +357,9 @@ def make_unique_token(is_unique):
     :param is_unique: a callable invoked with the token which should
                       return a boolean indicating if the token is actually
     """
-    token = unicode(uuid4())
+    token = str(uuid4())
     while not is_unique(token):
-        token = unicode(uuid4())
+        token = str(uuid4())
     return token
 
 
@@ -369,7 +371,7 @@ def encode_utf8(f):
             return ''
         if is_lazy_string(rv):
             rv = rv.value
-        return rv.encode('utf-8') if isinstance(rv, unicode) else str(rv)
+        return rv.encode('utf-8') if isinstance(rv, str) else str(rv)
 
     return _wrapper
 
@@ -381,7 +383,7 @@ def is_legacy_id(id_):
     numeric or have a leading zero, resulting in different objects
     with the same numeric id.
     """
-    return not isinstance(id_, (int, long)) and (not id_.isdigit() or str(int(id_)) != id_)
+    return not isinstance(id_, int) and (not id_.isdigit() or str(int(id_)) != id_)
 
 
 def text_to_repr(text, html=False, max_length=50):
@@ -397,7 +399,7 @@ def text_to_repr(text, html=False, max_length=50):
         text = u''
     if html:
         text = bleach.clean(text, tags=[], strip=True)
-    text = re.sub(ur'\s+', u' ', text)
+    text = re.sub(r'\s+', u' ', text)
     if max_length is not None and len(text) > max_length:
         text = text[:max_length] + u'...'
     return text.strip()
@@ -447,7 +449,7 @@ def format_repr(obj, *args, **kwargs):
                                     for t in inspect(cls).tables
                                     for c in t.constraints
                                     if isinstance(c, ForeignKeyConstraint))) if hasattr(cls, '__table__') else set()
-    formatted_args = [unicode(_format_value(getattr(obj, arg)))
+    formatted_args = [str(_format_value(getattr(obj, arg)))
                       if arg not in fkeys
                       else u'{}={}'.format(arg, _format_value(getattr(obj, arg)))
                       for arg in args]
@@ -487,7 +489,7 @@ def _convert_keys(value, convert_func):
         return type(value)(_convert_keys(x, convert_func) for x in value)
     elif not isinstance(value, dict):
         return value
-    return {convert_func(k): _convert_keys(v, convert_func) for k, v in value.iteritems()}
+    return {convert_func(k): _convert_keys(v, convert_func) for k, v in value.items()}
 
 
 def camelize_keys(dict_):
@@ -505,7 +507,7 @@ def crc32(data):
 
     When a unicode object is passed, it is encoded as UTF-8.
     """
-    if isinstance(data, unicode):
+    if isinstance(data, str):
         data = data.encode('utf-8')
     return binascii.crc32(data) & 0xffffffff
 
@@ -621,7 +623,7 @@ class RichMarkup(Markup):
     def __html__(self):
         # XXX: ensure we have no harmful HTML - there are certain malicious values that
         # are not caught by the legacy sanitizer that runs at submission time
-        string = RichMarkup(sanitize_html(unicode(self)), preformatted=self._preformatted)
+        string = RichMarkup(sanitize_html(str(self)), preformatted=self._preformatted)
         if string._preformatted:
             return u'<div class="preformatted">{}</div>'.format(string)
         else:
@@ -631,7 +633,7 @@ class RichMarkup(Markup):
         return {slot: getattr(self, slot) for slot in self.__slots__ if hasattr(self, slot)}
 
     def __setstate__(self, state):
-        for slot, value in state.iteritems():
+        for slot, value in state.items():
             setattr(self, slot, value)
 
 
@@ -639,14 +641,14 @@ class MarkdownText(Markup):
     """unicode/Markup class that renders markdown."""
 
     def __html__(self):
-        return render_markdown(unicode(self), extensions=('nl2br', 'tables'))
+        return render_markdown(str(self), extensions=('nl2br', 'tables'))
 
 
 class PlainText(Markup):
     """unicode/Markup class that renders plain text."""
 
     def __html__(self):
-        return u'<div class="preformatted">{}</div>'.format(escape(unicode(self)))
+        return u'<div class="preformatted">{}</div>'.format(escape(str(self)))
 
 
 def handle_legacy_description(field, obj, get_render_mode=attrgetter('render_mode'),

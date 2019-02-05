@@ -91,12 +91,12 @@ def create_flat_args():
 
     Do not use this for anything new - use request.* directly instead!"""
     args = request.args.copy()
-    for key, values in request.form.iterlists():
+    for key, values in request.form.lists():
         args.setlist(key, values)
-    for key, values in request.files.iterlists():
+    for key, values in request.files.lists():
         args.setlist(key, values)
     flat_args = {}
-    for key, item in args.iterlists():
+    for key, item in args.lists():
         flat_args[key] = map(_convert_request_value, item) if len(item) > 1 else _convert_request_value(item[0])
     return flat_args
 
@@ -147,9 +147,9 @@ def make_compat_redirect_func(blueprint, endpoint, view_func=None, view_args_con
             return view_func(**view_args)
         # Ugly hack to get non-list arguments unless they are used multiple times.
         # This is necessary since passing a list for an URL path argument breaks things.
-        view_args.update((k, v[0] if len(v) == 1 else v) for k, v in request.args.iterlists())
+        view_args.update((k, v[0] if len(v) == 1 else v) for k, v in request.args.lists())
         if view_args_conv is not None:
-            for oldkey, newkey in view_args_conv.iteritems():
+            for oldkey, newkey in view_args_conv.items():
                 value = view_args.pop(oldkey, None)
                 if newkey is not None:
                     view_args[newkey] = value
@@ -179,12 +179,12 @@ def url_for(endpoint, *targets, **values):
         for target in targets:
             if target:  # don't fail on None or mako's Undefined
                 locator.update(get_locator(target))
-        intersection = set(locator.iterkeys()) & set(values.iterkeys())
+        intersection = set(locator.keys()) & set(values.keys())
         if intersection:
             raise ValueError('url_for kwargs collide with locator: %s' % ', '.join(intersection))
         values.update(locator)
 
-    for key, value in values.iteritems():
+    for key, value in values.items():
         # Avoid =True and =False in the URL
         if isinstance(value, bool):
             values[key] = int(value)
@@ -237,7 +237,7 @@ def url_rule_to_js(endpoint):
                     } for is_dynamic, data in rule._trace
                 ],
                 'converters': dict((key, type(converter).__name__)
-                                   for key, converter in rule._converters.iteritems()
+                                   for key, converter in rule._converters.items()
                                    if type(converter) is not UnicodeConverter)
             } for rule in current_app.url_map.iter_rules(endpoint)
         ]
@@ -412,7 +412,7 @@ class XAccelMiddleware(object):
 
     def __init__(self, app, mapping):
         self.app = app
-        self.mapping = [(str(k), str(v)) for k, v in mapping.iteritems()]
+        self.mapping = [(str(k), str(v)) for k, v in mapping.items()]
 
     def __call__(self, environ, start_response):
         def _start_response(status, headers, exc_info=None):

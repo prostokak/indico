@@ -135,7 +135,7 @@ def extract_emails(smtp, required=True, count=None, one=False, regex=False, **kw
     compare = re.search if regex else operator.eq
     found = []
     for mail in smtp.outbox:
-        for header, value in kwargs.iteritems():
+        for header, value in kwargs.items():
             if not compare(value, mail[header]):
                 break
         else:  # everything matched
@@ -170,7 +170,7 @@ def extract_logs(caplog, required=True, count=None, one=False, regex=False, **kw
     compare = re.search if regex else operator.eq
     found = []
     for record in caplog.handler.records:
-        for key, value in kwargs.iteritems():
+        for key, value in kwargs.items():
             if not compare(value, getattr(record, key)):
                 break
         else:  # everything matched

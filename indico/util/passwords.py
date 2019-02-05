@@ -27,8 +27,8 @@ class BCryptPassword(object):
         if not self.hash or not value:
             # For security reasons we never consider an empty password/hash valid
             return False
-        if isinstance(value, unicode):
-            value = value.encode('utf-8')
+        if isinstance(value, str):
+            value = value.codencode('utf-8')
         return bcrypt.checkpw(value, self.hash)
 
     def __ne__(self, other):
@@ -42,7 +42,7 @@ class BCryptPassword(object):
 
     @staticmethod
     def hash(value):
-        if isinstance(value, unicode):
+        if isinstance(value, str):
             value = value.encode('utf-8')
         return bcrypt.hashpw(value, bcrypt.gensalt())
 

@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Indico; if not, see <http://www.gnu.org/licenses/>.
 
-from itertools import izip_longest
+from itertools import zip_longest
 from types import GeneratorType
 
 
@@ -48,7 +48,7 @@ def values_from_signal(signal_response, single_value=False, skip_none=True, as_l
         if not single_value and isinstance(value, multi_value_types):
             value_list = list(value)
             if value_list:
-                values.extend(izip_longest([plugin], value_list, fillvalue=plugin))
+                values.extend(zip_longest([plugin], value_list, fillvalue=plugin))
         else:
             values.append((plugin, value))
     if skip_none:
@@ -76,7 +76,7 @@ def named_objects_from_signal(signal_response, name_attr='name', plugin_attr=Non
         for plugin, cls in objects:
             setattr(cls, plugin_attr, plugin)
     mapping = {getattr(cls, name_attr): cls for _, cls in objects}
-    conflicting = {cls for _, cls in objects} - set(mapping.viewvalues())
+    conflicting = {cls for _, cls in objects} - set(mapping.values())
     if conflicting:
         names = ', '.join(sorted(getattr(x, name_attr) for x in conflicting))
         raise RuntimeError('Non-unique object names: {}'.format(names))

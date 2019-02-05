@@ -771,7 +771,7 @@ class Event(SearchableTitleMixin, DescriptionMixin, LocationMixin, ProtectionMan
             emails.setdefault(extra, extra)
         # Sanitize and format emails
         emails = {to_unicode(email.strip().lower()): '{} <{}>'.format(to_unicode(name), to_unicode(email))
-                  for email, name in emails.iteritems()
+                  for email, name in emails.items()
                   if email and email.strip()}
         own_email = session.user.email if has_request_context() and session.user else None
         return OrderedDict(sorted(emails.items(), key=lambda x: (x[0] != own_email, x[1].lower())))
@@ -835,7 +835,7 @@ class Event(SearchableTitleMixin, DescriptionMixin, LocationMixin, ProtectionMan
             start_dt = start_dt.astimezone(tzinfo)
             end_dt = end_dt.astimezone(tzinfo)
         duration = (end_dt - start_dt).days
-        for offset in xrange(duration + 1):
+        for offset in range(duration + 1):
             yield (start_dt + timedelta(days=offset)).date()
 
     def preload_all_acl_entries(self):

@@ -64,7 +64,7 @@ class RHRoomBookingCreateModifyBlockingBase(RHRoomBookingBase):
             else:
                 rooms_by_owner[owner].append(blocked_room)
 
-        for owner, rooms in rooms_by_owner.iteritems():
+        for owner, rooms in rooms_by_owner.items():
             notify_request(owner, self._blocking, rooms)
 
 

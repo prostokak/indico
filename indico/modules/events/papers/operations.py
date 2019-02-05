@@ -64,7 +64,7 @@ def _unassign_removed(event, changes):
         PaperReviewingRole.layout_reviewer: Contribution.paper_layout_reviewers,
     }
     changed_contribs = set()
-    for role, role_changes in changes.iteritems():
+    for role, role_changes in changes.items():
         removed = role_changes['removed']
         if not removed:
             continue

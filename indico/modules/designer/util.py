@@ -30,13 +30,13 @@ from indico.util.placeholders import get_placeholders
 
 def get_placeholder_options():
     return {name: placeholder
-            for name, placeholder in get_placeholders('designer-fields').viewitems()
+            for name, placeholder in get_placeholders('designer-fields').items()
             if not placeholder.admin_only or session.user.is_admin}
 
 
 def get_nested_placeholder_options():
-    groups = {group_id: {'title': group_title, 'options': {}} for group_id, group_title in GROUP_TITLES.viewitems()}
-    for name, placeholder in get_placeholder_options().viewitems():
+    groups = {group_id: {'title': group_title, 'options': {}} for group_id, group_title in GROUP_TITLES.items()}
+    for name, placeholder in get_placeholder_options().items():
         groups[placeholder.group]['options'][name] = placeholder.description
     return groups
 

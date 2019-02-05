@@ -114,8 +114,8 @@ class RegistrationFormFieldBase(object):
         data = dict(data)
         if 'places_limit' in data:
             data['places_limit'] = int(data['places_limit']) if data['places_limit'] else 0
-        versioned_data = {k: v for k, v in data.iteritems() if k in cls.versioned_data_fields}
-        unversioned_data = {k: v for k, v in data.iteritems() if k not in cls.versioned_data_fields}
+        versioned_data = {k: v for k, v in data.items() if k in cls.versioned_data_fields}
+        unversioned_data = {k: v for k, v in data.items() if k not in cls.versioned_data_fields}
         return unversioned_data, versioned_data
 
     @classmethod

@@ -26,9 +26,10 @@ from sqlalchemy.sql.type_api import TypeDecorator
 class _EnumIntWrapper(int):
     """Int subclass that keeps the repr of the enum's member."""
 
-    def __init__(self, enum_member):
-        self.enum_member = enum_member
-        super(_EnumIntWrapper, self).__init__(enum_member.value)
+    def __new__(cls, enum_member):
+        instance = super(cls, cls).__new__(cls, enum_member.value)
+        instance.enum_member = enum_member
+        return instance
 
     def __repr__(self):
         return repr(self.enum_member)

@@ -80,7 +80,7 @@ class RHManageRegistrationFormsDisplay(RHManageRegFormsBase):
             if column_name in available_columns:
                 enabled_columns.append({'id': column_name, 'title': available_columns[column_name]})
                 del available_columns[column_name]
-        for column_name, column_title in available_columns.iteritems():
+        for column_name, column_title in available_columns.items():
             disabled_columns.append({'id': column_name, 'title': column_title})
         disabled_columns.sort(key=itemgetter('title'))
 
@@ -97,7 +97,7 @@ class RHManageRegistrationFormsDisplay(RHManageRegFormsBase):
             if regform.publish_registrations_enabled:
                 enabled_forms.append(regform)
                 del available_forms[form_id]
-        for form_id, regform in available_forms.iteritems():
+        for form_id, regform in available_forms.items():
             # There might be forms with publication enabled that haven't been sorted by the user yet.
             if regform.publish_registrations_enabled:
                 enabled_forms.append(regform)

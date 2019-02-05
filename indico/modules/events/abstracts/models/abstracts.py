@@ -433,15 +433,15 @@ class Abstract(ProposalMixin, ProposalRevisionMixin, DescriptionMixin, CustomFie
             return AbstractReviewingState.not_started
         track_states = {x: self.get_track_reviewing_state(x) for x in self.reviewed_for_tracks}
         positiveish_states = {AbstractReviewingState.positive, AbstractReviewingState.conflicting}
-        if any(x == AbstractReviewingState.not_started for x in track_states.itervalues()):
+        if any(x == AbstractReviewingState.not_started for x in track_states.values()):
             return AbstractReviewingState.in_progress
-        elif all(x == AbstractReviewingState.negative for x in track_states.itervalues()):
+        elif all(x == AbstractReviewingState.negative for x in track_states.values()):
             return AbstractReviewingState.negative
-        elif all(x in positiveish_states for x in track_states.itervalues()):
+        elif all(x in positiveish_states for x in track_states.values()):
             if len(self.reviewed_for_tracks) > 1:
                 # Accepted for more than one track
                 return AbstractReviewingState.conflicting
-            elif any(x == AbstractReviewingState.conflicting for x in track_states.itervalues()):
+            elif any(x == AbstractReviewingState.conflicting for x in track_states.values()):
                 # The only accepted track is in conflicting state
                 return AbstractReviewingState.conflicting
             else:

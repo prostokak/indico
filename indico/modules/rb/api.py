@@ -194,7 +194,7 @@ class BookRoomHook(HTTPAPIHook):
             'from': self._fromDT,
             'to': self._toDT
         }
-        missing = [key for key, val in self._params.iteritems() if not val]
+        missing = [key for key, val in self._params.items() if not val]
         if missing:
             raise HTTPAPIError('Required params missing: {}'.format(', '.join(missing)))
         self._room = Room.get(self._params['room_id'])

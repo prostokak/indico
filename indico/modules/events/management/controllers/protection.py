@@ -91,7 +91,7 @@ class RHEventProtection(RHManageEventBase):
         registration_managers = {p.principal for p in self.event.acl_entries
                                  if p.has_management_permission('registration', explicit=True)}
         event_session_settings = session_settings.get_all(self.event)
-        coordinator_privs = {name: event_session_settings[val] for name, val in COORDINATOR_PRIV_SETTINGS.iteritems()
+        coordinator_privs = {name: event_session_settings[val] for name, val in COORDINATOR_PRIV_SETTINGS.items()
                              if event_session_settings.get(val)}
         permissions = [[serialize_principal(p.principal), list(get_principal_permissions(p, Event))]
                        for p in self.event.acl_entries]

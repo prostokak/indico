@@ -63,13 +63,13 @@ def handle_sqlalchemy_database_error():
         msg += ': {}'.format(exc.orig.diag.message_detail)
     if exc.orig.diag.message_hint:
         msg += ' ({})'.format(exc.orig.diag.message_hint)
-    raise ConstraintViolated, (msg, exc.orig), tb  # raise with original traceback
+    raise ConstraintViolated(msg).with_traceback(tb)
 
 
 class IndicoSQLAlchemy(SQLAlchemy):
     def __init__(self, *args, **kwargs):
         super(IndicoSQLAlchemy, self).__init__(*args, **kwargs)
-        self.m = type(b'_Models', (object,), {})
+        self.m = type('_Models', (object,), {})
 
     def enforce_constraints(self):
         """Enables immedaite enforcing of deferred constraints.
@@ -135,7 +135,7 @@ def _before_create(target, connection, **kw):
     for schema in schemas:
         if not _schema_exists(connection, schema):
             CreateSchema(schema).execute(connection)
-            signals.db_schema_created.send(unicode(schema), connection=connection)
+            signals.db_schema_created.send(str(schema), connection=connection)
     # Create our custom functions
     create_unaccent_function(connection)
     create_natsort_function(connection)
@@ -158,7 +158,7 @@ def _mapper_configured(mapper, class_):
 
 
 def _column_names(constraint, table):
-    return '_'.join((c if isinstance(c, basestring) else c.name) for c in constraint.columns)
+    return '_'.join((c if isinstance(c, str) else c.name) for c in constraint.columns)
 
 
 def _unique_index(constraint, table):

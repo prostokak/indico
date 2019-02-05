@@ -360,7 +360,7 @@ class outputGenerator(object):
             users[user].append('Author')
         for user in sList:
             users[user].append('Speaker')
-        for user, roles in users.iteritems():
+        for user, roles in users.items():
             tag = '100' if user in contrib.primary_authors else '700'
             out.openTag('datafield', [['tag', tag], ['ind1', ' '], ['ind2', ' ']])
             out.writeTag('subfield', u'{} {}'.format(user.last_name, user.first_name), [['code', 'a']])

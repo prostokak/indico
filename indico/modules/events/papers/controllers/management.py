@@ -114,13 +114,13 @@ class RHManageCompetences(RHManagePapersBase):
         form_class = make_competences_form(self.event)
         user_competences = self.event.cfp.user_competences
         defaults = {'competences_{}'.format(user_id): competences.competences
-                    for user_id, competences in user_competences.iteritems()}
+                    for user_id, competences in user_competences.items()}
         form = form_class(obj=FormDefaults(defaults))
         if form.validate_on_submit():
             key_prefix = 'competences_'
-            form_data = {int(key[len(key_prefix):]): value for key, value in form.data.iteritems()}
+            form_data = {int(key[len(key_prefix):]): value for key, value in form.data.items()}
             users = {u.id: u for u in User.query.filter(User.id.in_(form_data), ~User.is_deleted)}
-            for user_id, competences in form_data.iteritems():
+            for user_id, competences in form_data.items():
                 if user_id in user_competences:
                     update_competences(user_competences[user_id], competences)
                 elif competences:

@@ -74,15 +74,15 @@ def group_by_occurrence_date(occurrences, sort_by=None):
 
 
 def serialize_occurrences(data):
-    return {dt.isoformat(): reservation_occurrences_schema.dump(data).data for dt, data in data.iteritems()}
+    return {dt.isoformat(): reservation_occurrences_schema.dump(data).data for dt, data in data.items()}
 
 
 def serialize_blockings(data):
-    return {dt.isoformat(): simple_blockings_schema.dump(data).data for dt, data in data.iteritems()}
+    return {dt.isoformat(): simple_blockings_schema.dump(data).data for dt, data in data.items()}
 
 
 def serialize_nonbookable_periods(data):
-    return {dt.isoformat(): nonbookable_periods_schema.dump(data).data for dt, data in data.iteritems()}
+    return {dt.isoformat(): nonbookable_periods_schema.dump(data).data for dt, data in data.items()}
 
 
 def serialize_unbookable_hours(data):

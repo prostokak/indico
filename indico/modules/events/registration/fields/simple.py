@@ -97,7 +97,7 @@ class CheckboxField(RegistrationFormBillableField):
 
     @property
     def filter_choices(self):
-        return {unicode(val).lower(): caption for val, caption in self.friendly_data_mapping.iteritems()
+        return {unicode(val).lower(): caption for val, caption in self.friendly_data_mapping.items()
                 if val is not None}
 
     @property
@@ -158,7 +158,7 @@ class BooleanField(RegistrationFormBillableField):
 
     @property
     def filter_choices(self):
-        return {unicode(val).lower(): caption for val, caption in self.friendly_data_mapping.iteritems()
+        return {unicode(val).lower(): caption for val, caption in self.friendly_data_mapping.items()
                 if val is not None}
 
     @property
@@ -213,11 +213,11 @@ class CountryField(RegistrationFormFieldBase):
 
     @property
     def wtf_field_kwargs(self):
-        return {'choices': sorted(get_countries().iteritems(), key=itemgetter(1))}
+        return {'choices': sorted(get_countries().items(), key=itemgetter(1))}
 
     @classmethod
     def unprocess_field_data(cls, versioned_data, unversioned_data):
-        choices = sorted(({'caption': v, 'countryKey': k} for k, v in get_countries().iteritems()),
+        choices = sorted(({'caption': v, 'countryKey': k} for k, v in get_countries().items()),
                          key=itemgetter('caption'))
         return {'choices': choices}
 

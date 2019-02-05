@@ -67,6 +67,6 @@ def _make_attachment_count_column_property(cls):
 def _mappers_configured():
     # We need to create the column property here since we cannot import
     # Attachment/AttachmentFolder while the models are being defined
-    for model in db.Model._decl_class_registry.itervalues():
+    for model in db.Model._decl_class_registry.values():
         if hasattr(model, '__table__') and issubclass(model, AttachedItemsMixin):
             _make_attachment_count_column_property(model)

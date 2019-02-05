@@ -19,7 +19,7 @@ from __future__ import unicode_literals
 import base64
 import mimetypes
 import re
-import urlparse
+import urllib.parse as urlparse
 from contextlib import contextmanager
 
 import requests
@@ -170,7 +170,7 @@ class RewrittenManifest(Manifest):
     def __init__(self, manifest):
         super(RewrittenManifest, self).__init__()
         self._entries = {k: JinjaManifestEntry(entry.name, self._rewrite_paths(entry._paths))
-                         for k, entry in manifest._entries.viewitems()}
+                         for k, entry in manifest._entries.items()}
         self.used_assets = set()
 
     def _rewrite_paths(self, paths):
@@ -188,7 +188,7 @@ def collect_static_files():
     g.used_url_for_assets = set()
     used_assets = set()
     yield used_assets
-    for manifest in g.custom_manifests.viewvalues():
+    for manifest in g.custom_manifests.values():
         used_assets |= {p for k in manifest.used_assets for p in manifest[k]._paths}
     used_assets |= {rewrite_static_url(url) for url in g.used_url_for_assets}
     del g.custom_manifests

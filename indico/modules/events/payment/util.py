@@ -30,13 +30,13 @@ remove_prefix_re = re.compile('^payment_')
 
 def get_payment_plugins():
     """Returns a dict containing the available payment plugins."""
-    return {remove_prefix_re.sub('', p.name): p for p in plugin_engine.get_active_plugins().itervalues()
+    return {remove_prefix_re.sub('', p.name): p for p in plugin_engine.get_active_plugins().values()
             if isinstance(p, PaymentPluginMixin)}
 
 
 def get_active_payment_plugins(event):
     """Returns a dict containing the active payment plugins of an event."""
-    return {name: plugin for name, plugin in get_payment_plugins().iteritems()
+    return {name: plugin for name, plugin in get_payment_plugins().items()
             if plugin.event_settings.get(event, 'enabled')}
 
 

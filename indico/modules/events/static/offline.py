@@ -245,7 +245,7 @@ class StaticConferenceCreator(StaticEventCreator):
             RHTimetable: WPStaticTimetable,
             RHDisplayTracks: WPStaticConferenceProgram
         }
-        for rh_cls, wp in rhs.viewitems():
+        for rh_cls, wp in rhs.items():
             rh = rh_cls()
             rh.view_class = wp
             if rh_cls is RHTimetable:

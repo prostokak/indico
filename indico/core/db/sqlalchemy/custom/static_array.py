@@ -5,7 +5,7 @@
 StaticArray class and functions that SQLAlchemy can process instead of non hashable lists
 """
 
-from cStringIO import StringIO
+from io import StringIO
 
 from sqlalchemy import String, types
 from sqlalchemy.dialects.postgresql import ARRAY

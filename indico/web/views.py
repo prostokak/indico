@@ -18,7 +18,7 @@ from __future__ import absolute_import, unicode_literals
 
 import itertools
 import posixpath
-from urlparse import urlparse
+from werkzeug.urls import url_parse
 
 from flask import current_app, g, render_template, request, session
 from markupsafe import Markup
@@ -135,7 +135,7 @@ class WPJinjaMixin(object):
 
     @classmethod
     def _prefix_template(cls, template):
-        if isinstance(template, basestring):
+        if isinstance(template, str):
             return cls.template_prefix + template
         else:
             templates = []
@@ -215,7 +215,7 @@ class WPBase(WPBundleMixin):
         return ""
 
     def _fix_path(self, path):
-        url_path = urlparse(config.BASE_URL).path or '/'
+        url_path = url_parse(config.BASE_URL).path or '/'
         # append base path only if not absolute already
         # and not in 'static site' mode (has to be relative)
         if path[0] != '/' and not g.get('static_site'):
@@ -254,7 +254,7 @@ class WPBase(WPBundleMixin):
                                bundles=bundles, print_bundles=print_bundles,
                                site_name=core_settings.get('site_title'),
                                social=social_settings.get_all(),
-                               page_title=' - '.join(unicode(x) for x in title_parts if x),
+                               page_title=' - '.join(str(x) for x in title_parts if x),
                                head_content=to_unicode(self._getHeadContent()),
                                body=body)
 
@@ -299,7 +299,7 @@ class WPNewBase(WPJinjaMixin):
 
     @classmethod
     def _fix_path(cls, path):
-        url_path = urlparse(config.BASE_URL).path or '/'
+        url_path = url_parse(config.BASE_URL).path or '/'
         # append base path only if not absolute already
         # and not in 'static site' mode (has to be relative)
         if path[0] != '/' and not g.get('static_site'):
@@ -335,7 +335,7 @@ class WPNewBase(WPJinjaMixin):
                                bundles=bundles, print_bundles=print_bundles,
                                site_name=core_settings.get('site_title'),
                                social=social_settings.get_all(),
-                               page_title=' - '.join(unicode(x) for x in title_parts if x),
+                               page_title=' - '.join(str(x) for x in title_parts if x),
                                **params)
 
 

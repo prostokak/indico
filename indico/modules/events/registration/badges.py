@@ -18,7 +18,7 @@ from __future__ import division, unicode_literals
 
 import re
 from collections import namedtuple
-from itertools import izip, product
+from itertools import product
 
 from reportlab.lib.units import cm
 from reportlab.lib.utils import ImageReader
@@ -58,7 +58,7 @@ class RegistrantsListToBadgesPDF(DesignerPDFBase):
         config = self.config
         tpl_data = self.tpl_data
         while True:
-            for n_x, n_y in product(xrange(n_horizonal), xrange(n_vertical)):
+            for n_x, n_y in product(range(n_horizonal), range(n_vertical)):
                 yield (config.left_margin + n_x * (tpl_data.width_cm + config.margin_columns),
                        config.top_margin + n_y * (tpl_data.height_cm + config.margin_rows))
             canvas.showPage()
@@ -75,7 +75,7 @@ class RegistrantsListToBadgesPDF(DesignerPDFBase):
             raise BadRequest(_('The template dimensions are too large for the page size you selected'))
 
         # Print a badge for each registration
-        for registration, (x, y) in izip(self.registrations, self._iter_position(canvas, n_horizontal, n_vertical)):
+        for registration, (x, y) in zip(self.registrations, self._iter_position(canvas, n_horizontal, n_vertical)):
             self._draw_badge(canvas, registration, self.template, self.tpl_data, x * cm, y * cm)
 
     def _draw_badge(self, canvas, registration, template, tpl_data, pos_x, pos_y):
@@ -118,7 +118,7 @@ class RegistrantsListToBadgesPDFFoldable(RegistrantsListToBadgesPDF):
         n_horizontal = 1
         n_vertical = 1
 
-        for registration, (x, y) in izip(self.registrations, self._iter_position(canvas, n_horizontal, n_vertical)):
+        for registration, (x, y) in zip(self.registrations, self._iter_position(canvas, n_horizontal, n_vertical)):
             self._draw_badge(canvas, registration, self.template, self.tpl_data, x * cm, y * cm)
             if self.tpl_data.width > self.tpl_data.height:
                 canvas.translate(self.width, self.height)
@@ -168,7 +168,7 @@ class RegistrantsListToBadgesPDFDoubleSided(RegistrantsListToBadgesPDF):
         if page_used:
             badges_mix += ([None] * (per_page - page_used)) + badges_mix[-page_used:]
 
-        positioned_badges = izip(badges_mix, self._iter_position(canvas, n_horizontal, n_vertical))
+        positioned_badges = zip(badges_mix, self._iter_position(canvas, n_horizontal, n_vertical))
         for i, (registration, (x, y)) in enumerate(positioned_badges):
             if registration is None:
                 # blank item for an incomplete last page

@@ -115,7 +115,7 @@ class RHEmailTemplateREST(RHEditEmailTemplateBase):
         if request.json is None:
             raise BadRequest('Expected JSON payload')
 
-        invalid_fields = request.json.viewkeys() - {'stop_on_match'}
+        invalid_fields = request.json.keys() - {'stop_on_match'}
         if invalid_fields:
             raise BadRequest("Invalid fields: {}".format(', '.join(invalid_fields)))
 

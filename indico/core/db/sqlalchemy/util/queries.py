@@ -135,7 +135,7 @@ def get_related_object(obj, relationship, criteria):
     # if the relationship is loaded evaluate the criteria in python
     if relationship not in inspect(obj).unloaded:
         return next((x for x in getattr(obj, relationship)
-                     if all(_compare(getattr(x, k), v) for k, v in criteria.iteritems())),
+                     if all(_compare(getattr(x, k), v) for k, v in criteria.items())),
                     None)
     # otherwise query that specific object
     cls = getattr(type(obj), relationship).prop.mapper.class_

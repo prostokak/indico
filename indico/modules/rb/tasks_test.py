@@ -104,8 +104,8 @@ def test_roombooking_occurrences(mocker, create_user, create_room, create_reserv
     ]
 
     rb_settings.set_multi(settings)
-    user_map = {key: create_user(id_, **data) for id_, (key, data) in enumerate(users.iteritems(), 1)}
-    room_map = {key: create_room(**data) for key, data in rooms.iteritems()}
+    user_map = {key: create_user(id_, **data) for id_, (key, data) in enumerate(users.items(), 1)}
+    room_map = {key: create_room(**data) for key, data in rooms.items()}
 
     notification_map = defaultdict(dict)
     for data in reservations:

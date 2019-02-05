@@ -35,7 +35,7 @@ from indico.util.struct.enum import RichEnum
 from indico.util.struct.iterables import materialize_iterable, window
 
 
-class RescheduleMode(unicode, RichEnum):
+class RescheduleMode(str, RichEnum):
     __titles__ = {'none': 'Fit blocks', 'time': 'Start times', 'duration': 'Durations'}
     none = 'none'  # no action, just fit blocks..
     time = 'time'

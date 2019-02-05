@@ -49,7 +49,7 @@ class AgreementExportHook(HTTPAPIHook):
 
     def export_agreements(self, user):
         sent_agreements = {a.identifier: a for a in self.event.agreements.filter_by(type=self._definition.name)}
-        for person in islice(sorted(self._definition.get_people(self.event).itervalues(),
+        for person in islice(sorted(self._definition.get_people(self.event).values(),
                                     key=attrgetter('name', 'identifier')),
                              self._offset, self._offset + self._limit):
             agreement = sent_agreements.get(person.identifier)

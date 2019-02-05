@@ -145,13 +145,13 @@ class RegistrationListGenerator(ListGeneratorBase):
         field_types = {str(f.id): f.field_impl for f in self.regform.form_items
                        if f.is_field and not f.is_deleted and (f.parent_id is None or not f.parent.is_deleted)}
         field_filters = {field_id: data_list
-                         for field_id, data_list in filters['fields'].iteritems()
+                         for field_id, data_list in filters['fields'].items()
                          if field_id in field_types}
         if not field_filters and not filters['items']:
             return query
         criteria = [db.and_(RegistrationFormFieldData.field_id == field_id,
                             field_types[field_id].create_sql_filter(data_list))
-                    for field_id, data_list in field_filters.iteritems()]
+                    for field_id, data_list in field_filters.items()]
         items_criteria = []
         if 'checked_in' in filters['items']:
             checked_in_values = filters['items']['checked_in']

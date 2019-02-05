@@ -293,7 +293,6 @@ class SetupWizard(object):
                 # we want to go up a level since the data dir should not be
                 # created inside the source directory
                 default_root = os.path.dirname(default_root)
-            default_root = default_root.decode(sys.getfilesystemencoding())
         else:
             default_root = '/opt/indico'
         self.root_path = _prompt('Indico root path', default=default_root, path=True,
@@ -560,7 +559,7 @@ class SetupWizard(object):
             b'TEMP_DIR = {!r}'.format(os.path.join(self.data_root_path, 'tmp').encode('utf-8')),
             b'LOG_DIR = {!r}'.format(os.path.join(self.data_root_path, 'log').encode('utf-8')),
             b'STORAGE_BACKENDS = {!r}'.format({k.encode('utf-8'): v.encode('utf-8')
-                                              for k, v in storage_backends.iteritems()}),
+                                              for k, v in storage_backends.items()}),
             b"ATTACHMENT_STORAGE = 'default'",
             b'ROUTE_OLD_URLS = True' if self.old_archive_dir else None,
             b'',

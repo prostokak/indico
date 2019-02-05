@@ -164,7 +164,7 @@ def replace_placeholders(context, text, escape_html=True, **kwargs):
     :param escape_html: whether HTML escaping should be done
     :param kwargs: arguments specific to the context
     """
-    for name, placeholder in get_placeholders(context, **kwargs).iteritems():
+    for name, placeholder in get_placeholders(context, **kwargs).items():
         text = placeholder.replace(text, escape_html=escape_html, **kwargs)
     return text
 
@@ -176,7 +176,7 @@ def get_missing_placeholders(context, text, **kwargs):
     :param text: the text to check
     :param kwargs: arguments specific to the context
     """
-    placeholders = {p for p in get_placeholders(context, **kwargs).itervalues() if p.required}
+    placeholders = {p for p in get_placeholders(context, **kwargs).values() if p.required}
     return {p.friendly_name for p in placeholders if not p.is_in(text, **kwargs)}
 
 

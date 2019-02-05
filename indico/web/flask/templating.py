@@ -66,7 +66,7 @@ def natsort(environment, value, reverse=False, case_sensitive=False, attribute=N
     """
     if not case_sensitive:
         def sort_func(item):
-            if isinstance(item, basestring):
+            if isinstance(item, str):
                 item = item.lower()
             return natural_sort_key(item)
     else:
@@ -156,9 +156,9 @@ def register_template_hook(name, receiver, priority=50, markup=True, plugin=None
         return markup, priority, receiver(**kw)
 
     if plugin is None:
-        signals.plugin.template_hook.connect(_func, sender=unicode(name), weak=False)
+        signals.plugin.template_hook.connect(_func, sender=str(name), weak=False)
     else:
-        plugin.connect(signals.plugin.template_hook, _func, sender=unicode(name))
+        plugin.connect(signals.plugin.template_hook, _func, sender=str(name))
 
 
 def template_hook(name, priority=50, markup=True):
@@ -182,7 +182,7 @@ def call_template_hook(*name, **kwargs):
     name = name[0]
     as_list = kwargs.pop('as_list', False)
     values = []
-    for is_markup, priority, value in values_from_signal(signals.plugin.template_hook.send(unicode(name), **kwargs),
+    for is_markup, priority, value in values_from_signal(signals.plugin.template_hook.send(str(name), **kwargs),
                                                          single_value=True):
         if value:
             if is_markup:
@@ -268,7 +268,7 @@ class EnsureUnicodeExtension(Extension):
     @staticmethod
     def ensure_unicode(s):
         """Converts a bytestring to unicode. Must be registered as a filter!"""
-        if isinstance(s, str):
+        if isinstance(s, bytes):
             return s.decode('utf-8')
         return s
 

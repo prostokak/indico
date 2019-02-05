@@ -71,7 +71,7 @@ import xml.dom.minidom
 from io import BytesIO
 from mimetypes import guess_extension
 from tempfile import NamedTemporaryFile
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 import markdown
 import requests
@@ -88,7 +88,7 @@ start_double_quote_re = re.compile("(^|\s|'|`)\"")
 end_double_quote_re = re.compile("\"(,|\.|\s|$)")
 
 Image.init()
-IMAGE_FORMAT_EXTENSIONS = {format: ext for (ext, format) in Image.EXTENSION.viewitems()}
+IMAGE_FORMAT_EXTENSIONS = {format: ext for (ext, format) in Image.EXTENSION.items()}
 
 safe_mathmode_commands = {
     'above', 'abovewithdelims', 'acute', 'aleph', 'alpha', 'amalg', 'And', 'angle', 'approx', 'arccos', 'arcsin',
@@ -272,7 +272,7 @@ def latex_render_image(src, alt, strict=False):
                     raise ImageURLException("Cannot read image data. Maybe not an image file?")
             with NamedTemporaryFile(prefix='indico-latex-', suffix=extension, delete=False) as tempfile:
                 tempfile.write(resp.content)
-    except ImageURLException, e:
+    except ImageURLException as e:
         if strict:
             raise
         else:
@@ -302,7 +302,7 @@ class LaTeXExtension(markdown.Extension):
 
         # remove escape pattern -- \\(.*) -- as this messes up any embedded
         # math and we don't need to escape stuff any more for html
-        for key, pat in self.md.inlinePatterns.iteritems():
+        for key, pat in self.md.inlinePatterns.items():
             if pat.pattern == markdown.inlinepatterns.ESCAPE_RE:
                 self.md.inlinePatterns.pop(key)
                 break
@@ -624,11 +624,11 @@ class Table2Latex:
 
 class LinkTextPostProcessor(markdown.postprocessors.Postprocessor):
     def run(self, instr):
-        new_blocks = [re.sub(ur'<a[^>]*>([^<]+)</a>', lambda m: convert_link_to_latex(m.group(0)).strip(), block)
+        new_blocks = [re.sub(r'<a[^>]*>([^<]+)</a>', lambda m: convert_link_to_latex(m.group(0)).strip(), block)
                       for block in instr.split("\n\n")]
         return '\n\n'.join(new_blocks)
 
 
 def convert_link_to_latex(instr):
     dom = html5parser.fragment_fromstring(instr)
-    return ur'\href{%s}{%s}' % (dom.get('href'), dom.text)
+    return r'\href{%s}{%s}' % (dom.get('href'), dom.text)

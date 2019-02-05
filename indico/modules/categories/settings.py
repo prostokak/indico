@@ -83,7 +83,7 @@ class CategorySettingsProxy(SettingsProxyBase):
         :param category: Category (or its ID)
         :param items: Dict containing the new settings
         """
-        items = {k: self._convert_from_python(k, v) for k, v in items.iteritems()}
+        items = {k: self._convert_from_python(k, v) for k, v in items.items()}
         CategorySetting.set_multi(self.module, items, category_id=category)
         self._flush_cache()
 

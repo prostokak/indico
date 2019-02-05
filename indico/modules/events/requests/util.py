@@ -29,4 +29,4 @@ def is_request_manager(user):
     """Checks if the user manages any request types"""
     if not user:
         return False
-    return any(def_.can_be_managed(user) for def_ in get_request_definitions().itervalues())
+    return any(def_.can_be_managed(user) for def_ in get_request_definitions().values())

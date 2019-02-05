@@ -73,7 +73,7 @@ class Condition(object):
 
     @classmethod
     def _clean_values(cls, values, **kwargs):
-        return list(cls.get_available_values(**kwargs).viewkeys() & set(values))
+        return list(cls.get_available_values(**kwargs).keys() & set(values))
 
     @classmethod
     def check(cls, values, **kwargs):
@@ -109,7 +109,7 @@ def check_rule(context, rule, **kwargs):
     :param rule: the rule to check
     :param kwargs: arguments specific to the context
     """
-    for name, condition in get_conditions(context, **kwargs).iteritems():
+    for name, condition in get_conditions(context, **kwargs).items():
         if not condition.is_used(rule):
             if condition.required:
                 return False
@@ -131,5 +131,5 @@ def get_missing_conditions(context, rule, **kwargs):
     :param rule: the rule to check
     :param kwargs: arguments specific to the context
     """
-    rules = {condition for condition in get_conditions(context, **kwargs).itervalues() if condition.required}
+    rules = {condition for condition in get_conditions(context, **kwargs).values() if condition.required}
     return {condition.friendly_name for condition in rules if not condition.is_used(rule)}

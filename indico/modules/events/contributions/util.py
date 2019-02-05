@@ -254,7 +254,7 @@ def import_contributions_from_csv(event, f):
             contribution = create_contribution(event, contrib_fields, extend_parent=True)
 
         contributions.append(contribution)
-        for key, val in changes[event].viewitems():
+        for key, val in changes[event].items():
             all_changes[key].append(val)
 
         email = speaker_data['email']

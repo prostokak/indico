@@ -92,7 +92,7 @@ class RHCreateEvent(RHProtected):
             # Copy person link data since we would otherwise end up
             # adding the EventPersons of the first event in all other
             # events of the series.
-            for link, submitter in link_data.iteritems():
+            for link, submitter in link_data.items():
                 link_copy = EventPersonLink(**{col: getattr(link, col)
                                                for col in get_simple_column_attrs(EventPersonLink)})
                 link_copy.person = EventPerson(**{col: getattr(link.person, col)

@@ -16,7 +16,7 @@
 
 from __future__ import absolute_import, unicode_literals
 
-import cPickle
+import pickle
 import uuid
 from datetime import datetime, timedelta
 
@@ -133,7 +133,7 @@ class IndicoSession(BaseSession):
 
 class IndicoSessionInterface(SessionInterface):
     pickle_based = True
-    serializer = cPickle
+    serializer = pickle
     session_class = IndicoSession
     temporary_session_lifetime = timedelta(days=7)
 

@@ -110,7 +110,7 @@ class RegistrationCloner(EventCloner):
     def run(self, new_event, cloners, shared_data):
         form_map = shared_data['registration_forms']['form_map']
         field_data_map = shared_data['registration_forms']['field_data_map']
-        for old_form, new_form in form_map.iteritems():
+        for old_form, new_form in form_map.items():
             self._clone_registrations(old_form, new_form, field_data_map)
         self._synchronize_registration_friendly_id(new_event)
         db.session.flush()

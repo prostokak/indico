@@ -328,7 +328,7 @@ class AvatarProvisionalWrapper(Fossilizable):
 def search_avatars(criteria, exact=False, search_externals=False):
     from indico.modules.users.util import search_users
 
-    if not any(criteria.viewvalues()):
+    if not any(criteria.values()):
         return []
 
     def _process_identities(obj):
@@ -339,6 +339,6 @@ def search_avatars(criteria, exact=False, search_externals=False):
             return obj.as_avatar
 
     results = search_users(exact=exact, external=search_externals,
-                           **{AVATAR_FIELD_MAP[k]: v for (k, v) in criteria.iteritems() if v})
+                           **{AVATAR_FIELD_MAP[k]: v for (k, v) in criteria.items() if v})
 
     return [_process_identities(obj) for obj in results]

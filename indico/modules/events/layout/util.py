@@ -136,14 +136,14 @@ def _get_split_signal_entries():
     """Get the top-level and child menu entry data"""
     signal_entries = get_menu_entries_from_signal()
     top_data = OrderedDict((name, data)
-                           for name, data in sorted(signal_entries.iteritems(),
-                                                    key=lambda (name, data): _menu_entry_key(data))
+                           for name, data in sorted(signal_entries.items(),
+                                                    key=lambda name, data: _menu_entry_key(data))
                            if not data.parent)
     child_data = defaultdict(list)
-    for name, data in signal_entries.iteritems():
+    for name, data in signal_entries.items():
         if data.parent is not None:
             child_data[data.parent].append(data)
-    for parent, entries in child_data.iteritems():
+    for parent, entries in child_data.items():
         entries.sort(key=_menu_entry_key)
     return top_data, child_data
 
@@ -192,7 +192,7 @@ def _rebuild_menu(event):
     top_data, child_data = _get_split_signal_entries()
     pos_gen = count()
     entries = [_build_menu_entry(event, True, data, next(pos_gen), children=child_data.get(data.name))
-               for name, data in top_data.iteritems()]
+               for name, data in top_data.items()]
     return _save_menu_entries(entries)
 
 
@@ -207,22 +207,22 @@ def _check_menu(event):
                       joinedload('children').load_only('id', 'parent_id', 'name', 'position')))
 
     existing = {entry.name: entry for entry in query}
-    pos_gen = count(start=(max(x.position for x in existing.itervalues() if not x.parent)))
+    pos_gen = count(start=(max(x.position for x in existing.values() if not x.parent)))
     entries = []
     top_created = set()
-    for name, data in top_data.iteritems():
+    for name, data in top_data.items():
         if name in existing:
             continue
         entries.append(_build_menu_entry(event, True, data, next(pos_gen), child_data.get(name)))
         top_created.add(name)
 
     child_pos_gens = {}
-    for name, entry in existing.iteritems():
+    for name, entry in existing.items():
         if entry.parent is not None:
             continue
         child_pos_gens[name] = count(start=(max(x.position for x in entry.children) + 1 if entry.children else 0))
 
-    for parent_name, data_list in child_data.iteritems():
+    for parent_name, data_list in child_data.items():
         if parent_name in top_created:
             # adding a missing parent element also adds its children
             continue
@@ -271,7 +271,7 @@ def _build_transient_menu(event):
     top_data, child_data = _get_split_signal_entries()
     pos_gen = count()
     return [_build_menu_entry(event, False, data, next(pos_gen), children=child_data.get(data.name))
-            for name, data in top_data.iteritems()
+            for name, data in top_data.items()
             if data.parent is None]
 
 

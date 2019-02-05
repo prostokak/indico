@@ -38,7 +38,7 @@ def send_new_agreements(event, name, people, email_body, cc_addresses, from_addr
     :param from_address: Email address of the sender
     """
     agreements = []
-    for person in people.itervalues():
+    for person in people.values():
         agreement = Agreement.create_from_data(event=event, type_=name, person=person)
         db.session.add(agreement)
         agreements.append(agreement)

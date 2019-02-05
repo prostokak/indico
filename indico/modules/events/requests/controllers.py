@@ -54,8 +54,8 @@ class RHRequestsEventRequests(EventOrRequestManagerMixin, RHManageEventBase):
             raise NotFound
         requests = Request.find_latest_for_event(self.event)
         if self.protection_overridden:
-            definitions = {name: def_ for name, def_ in definitions.iteritems() if def_.can_be_managed(session.user)}
-            requests = {name: req for name, req in requests.iteritems()
+            definitions = {name: def_ for name, def_ in definitions.items() if def_.can_be_managed(session.user)}
+            requests = {name: req for name, req in requests.items()
                         if req.definition and req.definition.can_be_managed(session.user)}
         return WPRequestsEventManagement.render_template('events/requests/event_requests.html', self.event,
                                                          definitions=definitions, requests=requests)

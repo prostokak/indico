@@ -282,8 +282,8 @@ def test_get_with_data(db, create_room, create_equipment_type, only_active):
         'no_eq': {'room': create_room(), 'equipment': []},
         'all_eq': {'room': create_room(), 'equipment': [eq]}
     }
-    room_types = {room_data['room']: type_ for type_, room_data in rooms.iteritems()}
-    for room in rooms.itervalues():
+    room_types = {room_data['room']: type_ for type_, room_data in rooms.items()}
+    for room in rooms.values():
         room['room'].available_equipment = room['equipment']
     db.session.flush()
     results = list(Room.get_with_data(only_active=only_active))

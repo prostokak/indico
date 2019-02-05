@@ -100,7 +100,7 @@ class RHImportSurveyQuestionnaire(RHManageSurveyBase):
             else:
                 raise ValueError('Invalid text item')
         elif data['type'] == 'question':
-            for key, value in data['field_data'].iteritems():
+            for key, value in data['field_data'].items():
                 if value is not None:
                     data[key] = value
             field_cls = get_field_types()[data['field_type']]

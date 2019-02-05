@@ -117,7 +117,7 @@ def _approve_or_request_rooms(blocking, blocked_rooms=None):
         else:
             # TODO: notify all managers of a room?
             rooms_by_owner[blocked_room.room.owner].append(blocked_room)
-    for owner, rooms in rooms_by_owner.iteritems():
+    for owner, rooms in rooms_by_owner.items():
         notify_request(owner, blocking, rooms)
 
 

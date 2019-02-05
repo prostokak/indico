@@ -48,8 +48,8 @@ def _serialize_user(user):
 
 def _get_users_in_roles(data):
     user_ids = {user_id
-                for user_roles in data.viewvalues()
-                for users in user_roles.viewvalues()
+                for user_roles in data.values()
+                for users in user_roles.values()
                 for user_id in users}
     if not user_ids:
         return []
@@ -80,7 +80,7 @@ class EmailRuleListField(JSONField):
             c.name: {
                 'title': c.description,
                 'labelText': c.label_text,
-                'options': list(c.get_available_values(event=self.event).viewitems()),
+                'options': list(c.get_available_values(event=self.event).items()),
                 'compatibleWith': c.compatible_with,
                 'required': c.required
             } for c in self.accepted_condition_types
@@ -90,7 +90,7 @@ class EmailRuleListField(JSONField):
         super(EmailRuleListField, self).pre_validate(form)
         if not all(self.data):
             raise ValueError(_('Rules may not be empty'))
-        if any('*' in crit for rule in self.data for crit in rule.itervalues()):
+        if any('*' in crit for rule in self.data for crit in rule.values()):
             # '*' (any) rules should never be included in the JSON, and having
             # such an entry would result in the rule never passing.
             raise ValueError('Unexpected "*" criterion')
@@ -229,10 +229,10 @@ class TrackRoleField(JSONField):
 
         track_roles = {}
         # Update track-specific reviewers/conveners
-        for track_id, roles in self.data.viewitems():
+        for track_id, roles in self.data.items():
             track = track_dict[int(track_id)]
             track_roles[track] = defaultdict(set)
-            for role_id, user_ids in roles.viewitems():
+            for role_id, user_ids in roles.items():
                 users = {user_dict[user_id] for user_id in user_ids}
                 track_roles[track][role_id] = users
                 if role_id == 'convener':

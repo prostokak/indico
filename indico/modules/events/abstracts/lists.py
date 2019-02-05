@@ -129,7 +129,7 @@ class AbstractListGeneratorBase(ListGeneratorBase):
             return query
 
         if field_filters:
-            for contribution_type_id, field_values in field_filters.iteritems():
+            for contribution_type_id, field_values in field_filters.items():
                 criteria.append(Abstract.field_values.any(db.and_(
                     AbstractFieldValue.contribution_field_id == contribution_type_id,
                     AbstractFieldValue.data.op('#>>')('{}').in_(field_values)
@@ -143,7 +143,7 @@ class AbstractListGeneratorBase(ListGeneratorBase):
                 'submitted_for_tracks': Abstract.submitted_for_tracks,
                 'reviewed_for_tracks': Abstract.reviewed_for_tracks
             }
-            for key, column in static_filters.iteritems():
+            for key, column in static_filters.items():
                 ids = set(item_filters.get(key, ()))
                 if not ids:
                     continue
@@ -249,7 +249,7 @@ class AbstractListGeneratorDisplay(AbstractListGeneratorBase):
         if self.track.can_convene(session.user):
             items.add('score')
         self.static_items = OrderedDict((key, value)
-                                        for key, value in self.static_items.iteritems()
+                                        for key, value in self.static_items.items()
                                         if key in items)
 
     def _build_query(self):

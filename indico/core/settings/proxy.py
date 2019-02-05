@@ -73,9 +73,9 @@ class SettingsProxyBase(object):
             raise ValueError('cannot use strict mode with no defaults')
         if acls and not self.acl_proxy_class:
             raise ValueError('this proxy does not support acl settings')
-        if acls and self.acl_names & self.defaults.viewkeys():
+        if acls and self.acl_names & self.defaults.keys():
             raise ValueError('acl settings cannot have a default value')
-        if acls and converters and acls & converters.viewkeys():
+        if acls and converters and acls & converters.keys():
             raise ValueError('acl settings cannot have custom converters')
 
     @return_ascii
@@ -263,7 +263,7 @@ class SettingsProxy(SettingsProxyBase):
 
         :param items: Dict containing the new settings
         """
-        items = {k: self._convert_from_python(k, v) for k, v in items.iteritems()}
+        items = {k: self._convert_from_python(k, v) for k, v in items.items()}
         self._split_call(items,
                          lambda x: Setting.set_multi(self.module, x),
                          lambda x: SettingPrincipal.set_acl_multi(self.module, x))
@@ -381,8 +381,8 @@ class PrefixSettingsProxy(object):
 
     def get_all(self, no_defaults=False, arg=None):
         rv = {}
-        for prefix, proxy in self.mapping.iteritems():
-            for key, value in self._call(proxy.get_all, arg, no_defaults=no_defaults).iteritems():
+        for prefix, proxy in self.mapping.items():
+            for key, value in self._call(proxy.get_all, arg, no_defaults=no_defaults).items():
                 rv[prefix + self.sep + key] = value
         return rv
 
@@ -396,10 +396,10 @@ class PrefixSettingsProxy(object):
 
     def set_multi(self, items, arg=None):
         by_proxy = defaultdict(dict)
-        for name, value in items.iteritems():
+        for name, value in items.items():
             proxy, local_name = self._resolve_prefix(name)
             by_proxy[proxy][local_name] = value
-        for proxy, local_items in by_proxy.iteritems():
+        for proxy, local_items in by_proxy.items():
             self._call(proxy.set_multi, arg, local_items)
 
     def delete(self, *names, **kwargs):
@@ -409,9 +409,9 @@ class PrefixSettingsProxy(object):
         for name in names:
             proxy, local_name = self._resolve_prefix(name)
             by_proxy[proxy].append(local_name)
-        for proxy, local_names in by_proxy.iteritems():
+        for proxy, local_names in by_proxy.items():
             self._call(proxy.delete, arg, *local_names)
 
     def delete_all(self, arg=None):
-        for proxy in self.mapping.itervalues():
+        for proxy in self.mapping.values():
             self._call(proxy.delete_all, arg)

@@ -167,7 +167,7 @@ class IndicoModel(Model):
         cache = g.get('relationship_cache', {}).get(type(target))
         if not cache:
             return
-        for rel, value in cache['data'].get(target, {}).iteritems():
+        for rel, value in cache['data'].get(target, {}).items():
             if rel not in target.__dict__:
                 set_committed_value(target, rel, value)
 
@@ -207,7 +207,7 @@ class IndicoModel(Model):
         """
         cls = type(self)
         changed = {}
-        for key, value in data.iteritems():
+        for key, value in data.items():
             if keys and key not in keys:
                 return False
             if skip and key in skip:
@@ -248,7 +248,7 @@ class IndicoModel(Model):
 @listens_for(orm.mapper, 'after_configured', once=True)
 def _mappers_configured():
     from indico.core.db import db
-    for model in db.Model._decl_class_registry.itervalues():
+    for model in db.Model._decl_class_registry.values():
         if hasattr(model, '__table__') and model.allow_relationship_preloading:
             listen(model, 'load', model._populate_preloaded_relationships)
 
@@ -363,7 +363,7 @@ def auto_table_args(cls, **extra_kwargs):
 
 
 def _get_backref_name(relationship):
-    return relationship.backref if isinstance(relationship.backref, basestring) else relationship.backref[0]
+    return relationship.backref if isinstance(relationship.backref, str) else relationship.backref[0]
 
 
 def populate_one_to_one_backrefs(model, *relationships):
@@ -383,7 +383,7 @@ def populate_one_to_one_backrefs(model, *relationships):
 
         @listens_for(model, 'load')
         def _populate_backrefs(target, context):
-            for name, backref in mappings.iteritems():
+            for name, backref in mappings.items():
                 # __dict__ to avoid triggering lazy-loaded relationships
                 if target.__dict__.get(name) is not None:
                     set_committed_value(getattr(target, name), backref, target)

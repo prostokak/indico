@@ -179,7 +179,7 @@ class RHAssignPapersBase(RHPapersActionBase):
     def _render_form(self, users, action):
         user_competences = self.event.cfp.user_competences
         competences = {'competences_{}'.format(user_id): competences.competences
-                       for user_id, competences in user_competences.iteritems()}
+                       for user_id, competences in user_competences.items()}
         return jsonify_template('events/papers/assign_role.html', event=self.event, role=self.role.name,
                                 action=action, users=users, competences=competences,
                                 contribs=self.contributions)

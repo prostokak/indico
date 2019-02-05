@@ -15,12 +15,16 @@
 # along with Indico; if not, see <http://www.gnu.org/licenses/>.
 
 import re
-from HTMLParser import HTMLParseError, HTMLParser
+from html.parser import HTMLParser
 from xml.sax.saxutils import unescape
 
 from indico.core.logger import Logger
 from indico.util.i18n import _
 from indico.util.string import to_unicode
+
+
+class HTMLParseError(Exception):
+    pass
 
 
 allowedTags = ["a","abbr","acronym","address","area",
@@ -151,7 +155,7 @@ class RestrictedHTMLParser( HTMLParser ):
         if message.startswith("EOF in middle of entity or char ref"):
             return
 
-        raise HTMLParseError(message, self.getpos())
+        raise HTMLParseError(message)
 
     def handle_inlineStyle(self, style):
         # disallow urls
@@ -180,7 +184,7 @@ class RestrictedHTMLParser( HTMLParser ):
                 try:
                     #remove replacement characters from unescaped characters
                     val_unescaped = val_unescaped.replace(u"\ufffd", "")
-                except UnicodeDecodeError, e:
+                except UnicodeDecodeError as e:
                     Logger.get('RestrictedHTMLParser-urlProperties').exception(str(e))
                 if (re.match("^[a-z0-9][-+.a-z0-9]*:", val_unescaped) and
                     (val_unescaped.split(':')[0] not in
@@ -271,7 +275,7 @@ def strip_ml_tags(in_text):
                 while s_list[i] != '>':
                     # pop everything from the the left-angle bracket until the right-angle bracket
                     s_list.pop(i)
-            except IndexError,e:
+            except IndexError as e:
                 Logger.get('strip_ml_tags').debug("Not found '>' (the end of the html tag): %s"%e)
                 continue
 

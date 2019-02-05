@@ -56,7 +56,7 @@ class StaticListLink(db.Model):
         index=True,
         unique=True,
         nullable=False,
-        default=lambda: unicode(uuid4())
+        default=lambda: str(uuid4())
     )
     created_dt = db.Column(
         UTCDateTime,

@@ -44,7 +44,7 @@ def make_diff_log(changes, fields):
             old and new value
     """
     data = {'_diff': True}
-    for key, field_data in fields.iteritems():
+    for key, field_data in fields.items():
         try:
             change = changes[key]
         except KeyError:
@@ -63,7 +63,7 @@ def make_diff_log(changes, fields):
         elif all(isinstance(x, Enum) for x in change):
             type_ = 'enum'
             change = [orig_string(getattr(x, 'title', x.name)) for x in change]
-        elif all(isinstance(x, (int, long, float)) for x in change):
+        elif all(isinstance(x, (int, float)) for x in change):
             type_ = 'number'
         elif all(isinstance(x, (list, tuple)) for x in change):
             type_ = 'list'

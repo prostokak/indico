@@ -17,7 +17,7 @@
 import hashlib
 import hmac
 import time
-import urllib
+from urllib.parse import urlencode
 
 from indico.core.config import config
 from indico.modules.api import APIMode, api_settings
@@ -37,19 +37,19 @@ def get_query_parameter(queryParams, keys, default=None, integer=False):
 
 
 def build_indico_request(path, params, api_key=None, secret_key=None, persistent=False):
-    items = params.items() if hasattr(params, 'items') else list(params)
+    items = list(params.items()) if hasattr(params, 'items') else list(params)
     if api_key:
         items.append(('apikey', api_key))
     if secret_key:
         if not persistent:
             items.append(('timestamp', str(int(time.time()))))
         items = sorted(items, key=lambda x: x[0].lower())
-        url = '%s?%s' % (path, urllib.urlencode(items))
+        url = '%s?%s' % (path, urlencode(items))
         signature = hmac.new(secret_key, url, hashlib.sha1).hexdigest()
         items.append(('signature', signature))
     if not items:
         return path
-    return '%s?%s' % (path, urllib.urlencode(items))
+    return '%s?%s' % (path, urlencode(items))
 
 
 def generate_public_auth_request(apiKey, path, params=None):

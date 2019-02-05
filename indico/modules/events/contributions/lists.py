@@ -92,7 +92,7 @@ class ContributionListGenerator(ListGeneratorBase):
         filter_cols = {'session': Contribution.session_id,
                        'track': Contribution.track_id,
                        'type': Contribution.type_id}
-        for key, column in filter_cols.iteritems():
+        for key, column in filter_cols.items():
             ids = set(filters['items'].get(key, ()))
             if not ids:
                 continue

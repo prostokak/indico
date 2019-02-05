@@ -143,7 +143,7 @@ class Location(db.Model):
             building_rooms[room.building].append(room)
 
         buildings = []
-        for building_name, rooms in building_rooms.iteritems():
+        for building_name, rooms in building_rooms.items():
             room_with_lat_lon = next((r for r in rooms if r.longitude and r.latitude), None)
             if not room_with_lat_lon:
                 continue

@@ -496,7 +496,7 @@ class PrincipalPermissionsMixin(PrincipalMixin):
             return self.full_access
         elif not explicit and self.full_access:
             return True
-        valid_permissions = get_available_permissions(self.principal_for_obj).viewkeys()
+        valid_permissions = get_available_permissions(self.principal_for_obj).keys()
         current_permissions = set(self.permissions) & valid_permissions
         if permission == 'ANY':
             return bool(current_permissions)
@@ -510,7 +510,7 @@ class PrincipalPermissionsMixin(PrincipalMixin):
             if explicit:
                 raise ValueError('permission must be specified if explicit=True')
             return cls.full_access
-        valid_permissions = get_available_permissions(cls.principal_for_obj).viewkeys()
+        valid_permissions = get_available_permissions(cls.principal_for_obj).keys()
         if permission == 'ANY':
             crit = (cls.permissions.op('&&')(db.func.cast(valid_permissions, ARRAY(db.String))))
         else:

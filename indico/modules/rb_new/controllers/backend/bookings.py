@@ -53,7 +53,7 @@ NUM_SUGGESTIONS = 5
 
 
 def _serialize_availability(availability):
-    for data in availability.viewvalues():
+    for data in availability.values():
         data['blockings'] = serialize_blockings(data.get('blockings', {}))
         data['nonbookable_periods'] = serialize_nonbookable_periods(data.get('nonbookable_periods', {}))
         data['unbookable_hours'] = serialize_unbookable_hours(data.get('unbookable_hours', {}))
@@ -70,7 +70,7 @@ def _serialize_booking_details(booking):
     occurrences_by_type = dict(bookings={}, cancellations={}, rejections={}, other_bookings={})
     booking_details['occurrences'] = occurrences_by_type
     booking_details['date_range'] = date_range
-    for dt, [occ] in occurrences.iteritems():
+    for dt, [occ] in occurrences.items():
         serialized_occ = reservation_details_occurrences_schema.dump([occ]).data
         if occ.is_cancelled:
             occurrences_by_type['cancellations'][dt.isoformat()] = serialized_occ
@@ -105,7 +105,7 @@ class RHTimeline(RHRoomBookingBase):
         date_range, availability = get_rooms_availability(rooms, **kwargs)
         date_range = [dt.isoformat() for dt in date_range]
 
-        for data in availability.viewvalues():
+        for data in availability.values():
             # add additional helpful attributes
             data.update({
                 'num_days_available': len(date_range) - len(data['conflicts']),

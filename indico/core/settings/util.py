@@ -23,16 +23,16 @@ _not_in_db = object()
 
 
 def _get_cache_key(proxy, name, kwargs):
-    return type(proxy), proxy.module, name, frozenset(kwargs.viewitems())
+    return type(proxy), proxy.module, name, frozenset(kwargs.items())
 
 
 def _preload_settings(cls, proxy, cache, **kwargs):
     settings = cls.get_all(proxy.module, **kwargs)
-    for name, value in settings.iteritems():
+    for name, value in settings.items():
         cache_key = _get_cache_key(proxy, name, kwargs)
         cache[cache_key] = value
     # cache missing entries as not in db
-    for name in proxy.defaults.viewkeys() - settings.viewkeys():
+    for name in proxy.defaults.keys() - settings.keys():
         cache_key = _get_cache_key(proxy, name, kwargs)
         cache[cache_key] = _not_in_db
     return settings
@@ -44,12 +44,12 @@ def get_all_settings(cls, acl_cls, proxy, no_defaults, **kwargs):
         rv = cls.get_all(proxy.module, **kwargs)
         if acl_cls and proxy.acl_names:
             rv.update(acl_cls.get_all_acls(proxy.module, **kwargs))
-        return {k: proxy._convert_to_python(k, v) for k, v in rv.iteritems()}
+        return {k: proxy._convert_to_python(k, v) for k, v in rv.items()}
     settings = dict(proxy.defaults)
     if acl_cls and proxy.acl_names:
         settings.update({name: set() for name in proxy.acl_names})
     settings.update({k: proxy._convert_to_python(k, v)
-                     for k, v in cls.get_all(proxy.module, **kwargs).iteritems()
+                     for k, v in cls.get_all(proxy.module, **kwargs).items()
                      if not proxy.strict or k in proxy.defaults})
     if acl_cls and proxy.acl_names:
         settings.update(acl_cls.get_all_acls(proxy.module, **kwargs))

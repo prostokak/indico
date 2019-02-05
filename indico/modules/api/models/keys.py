@@ -42,13 +42,13 @@ class APIKey(db.Model):
         UUID,
         nullable=False,
         unique=True,
-        default=lambda: unicode(uuid4())
+        default=lambda: str(uuid4())
     )
     #: secret key used for signed requests
     secret = db.Column(
         UUID,
         nullable=False,
-        default=lambda: unicode(uuid4())
+        default=lambda: str(uuid4())
     )
     #: ID of the user associated with the key
     user_id = db.Column(

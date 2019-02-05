@@ -172,7 +172,7 @@ class RHPersonsBase(RHManageEventBase):
                                                    'person': [],
                                                    'has_event_person': False,
                                                    'id_field_name': 'user_id'})
-        for user, roles in event_user_roles.viewitems():
+        for user, roles in event_user_roles.items():
             if user in event_person_users:
                 continue
             for role in roles:
@@ -183,7 +183,7 @@ class RHPersonsBase(RHManageEventBase):
             user_metadata['roles'] = OrderedDict(sorted(user_metadata['roles'].items(), key=lambda x: x[1]['code']))
 
         # Some EventPersons will have no roles since they were connected to deleted things
-        persons = {email: data for email, data in persons.viewitems() if any(data['roles'].viewvalues())}
+        persons = {email: data for email, data in persons.items() if any(data['roles'].values())}
         persons = dict(persons, **internal_role_users)
         return persons
 
@@ -206,7 +206,7 @@ class RHPersonsList(RHPersonsBase):
                                    .join(Session).options(joinedload('session').joinedload('acl_entries')))
 
         persons = self.get_persons()
-        person_list = sorted(persons.viewvalues(), key=lambda x: x['person'].display_full_name.lower())
+        person_list = sorted(persons.values(), key=lambda x: x['person'].display_full_name.lower())
 
         num_no_account = 0
         for principal in itertools.chain(event_principal_query, contrib_principal_query, session_principal_query):

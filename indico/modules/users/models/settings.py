@@ -119,7 +119,7 @@ class UserSettingsProxy(SettingsProxyBase):
         """
         for name in items:
             self._check_name(name)
-        items = {k: self._convert_from_python(k, v) for k, v in items.iteritems()}
+        items = {k: self._convert_from_python(k, v) for k, v in items.items()}
         UserSetting.set_multi(self.module, items, **user)
         self._flush_cache()
 

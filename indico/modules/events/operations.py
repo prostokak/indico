@@ -115,7 +115,7 @@ def create_event(category, event_type, data, add_creator_as_manager=True, featur
 
 
 def update_event(event, update_timetable=False, **data):
-    assert set(data.viewkeys()) <= {'title', 'description', 'url_shortcut', 'location_data', 'keywords',
+    assert set(data.keys()) <= {'title', 'description', 'url_shortcut', 'location_data', 'keywords',
                                     'person_link_data', 'start_dt', 'end_dt', 'timezone', 'keywords', 'references',
                                     'organizer_info', 'additional_info', 'contact_title', 'contact_emails',
                                     'contact_phones', 'start_dt_override', 'end_dt_override'}
@@ -207,7 +207,7 @@ def _log_event_update(event, changes, visible_person_link_changes=False):
         # anyway and allow other code to act on them?
         changes.pop('person_links', None)
     if changes:
-        if set(changes.viewkeys()) <= {'timezone', 'start_dt', 'end_dt', 'start_dt_override', 'end_dt_override'}:
+        if set(changes.keys()) <= {'timezone', 'start_dt', 'end_dt', 'start_dt_override', 'end_dt_override'}:
             what = 'Dates'
         elif len(changes) == 1:
             what = log_fields[changes.keys()[0]]
@@ -256,7 +256,7 @@ def _format_person(data):
 
 
 def update_event_protection(event, data):
-    assert set(data.viewkeys()) <= {'protection_mode', 'own_no_access_contact', 'access_key', 'visibility'}
+    assert set(data.keys()) <= {'protection_mode', 'own_no_access_contact', 'access_key', 'visibility'}
     changes = event.populate_from_dict(data)
     db.session.flush()
     signals.event.updated.send(event, changes=changes)
@@ -340,7 +340,7 @@ def update_permissions(obj, form):
     event = obj if isinstance(obj, Event) else obj.event
     current_principal_permissions = {p.principal: get_principal_permissions(p, obj.__class__)
                                      for p in obj.acl_entries}
-    current_principal_permissions = {k: v for k, v in current_principal_permissions.iteritems() if v}
+    current_principal_permissions = {k: v for k, v in current_principal_permissions.items() if v}
     new_principal_permissions = {
         principal_from_fossil(fossil, allow_emails=True, allow_networks=True, allow_pending=True, event=event):
             set(permissions)
@@ -362,9 +362,9 @@ def update_principals_permissions(obj, current, new):
     :param current: A dict mapping principals to a set with its current permissions
     :param new: A dict mapping principals to a set with its new permissions
     """
-    user_selectable_permissions = {v.name for k, v in get_available_permissions(obj.__class__).viewitems()
+    user_selectable_permissions = {v.name for k, v in get_available_permissions(obj.__class__).items()
                                    if v.user_selectable}
-    for principal, permissions in current.viewitems():
+    for principal, permissions in current.items():
         if principal not in new:
             permissions_kwargs = {
                 'full_access': False,

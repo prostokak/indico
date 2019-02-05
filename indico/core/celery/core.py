@@ -164,7 +164,7 @@ class IndicoPersistentScheduler(PersistentScheduler):
 
     def setup_schedule(self):
         deleted = set()
-        for task_name, entry in config.SCHEDULED_TASK_OVERRIDE.iteritems():
+        for task_name, entry in config.SCHEDULED_TASK_OVERRIDE.items():
             if task_name not in self.app.conf['beat_schedule']:
                 self.logger.error('Invalid entry in ScheduledTaskOverride: %s', task_name)
                 continue
@@ -185,13 +185,13 @@ class IndicoPersistentScheduler(PersistentScheduler):
 
     def _print_schedule(self, deleted):
         table_data = [['Name', 'Schedule']]
-        for entry in sorted(self.app.conf['beat_schedule'].itervalues(), key=itemgetter('task')):
+        for entry in sorted(self.app.conf['beat_schedule'].values(), key=itemgetter('task')):
             table_data.append([cformat('%{yellow!}{}%{reset}').format(entry['task']),
                                cformat('%{green}{!r}%{reset}').format(entry['schedule'])])
         for task_name in sorted(deleted):
             table_data.append([cformat('%{yellow}{}%{reset}').format(task_name),
                                cformat('%{red!}Disabled%{reset}')])
-        print AsciiTable(table_data, cformat('%{white!}Periodic Tasks%{reset}')).table
+        print(AsciiTable(table_data, cformat('%{white!}Periodic Tasks%{reset}')).table)
 
 
 class _CelerySAWrapper(object):
@@ -227,7 +227,7 @@ class _CelerySAWrapper(object):
 
     @classmethod
     def wrap_kwargs(cls, kwargs):
-        return {k: cls(v) if isinstance(v, db.Model) else v for k, v in kwargs.iteritems()}
+        return {k: cls(v) if isinstance(v, db.Model) else v for k, v in kwargs.items()}
 
     @classmethod
     def unwrap_args(cls, args):
@@ -235,4 +235,4 @@ class _CelerySAWrapper(object):
 
     @classmethod
     def unwrap_kwargs(cls, kwargs):
-        return {k: v.object if isinstance(v, cls) else v for k, v in kwargs.iteritems()}
+        return {k: v.object if isinstance(v, cls) else v for k, v in kwargs.items()}

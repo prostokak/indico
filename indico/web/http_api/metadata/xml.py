@@ -44,10 +44,10 @@ class XMLSerializer(Serializer):
         self._typeMap = kwargs.pop('typeMap', {})
         super(XMLSerializer, self).__init__(query_params, pretty, **kwargs)
 
-    def _convert(self, value, _control_char_re=re.compile(ur'[\x00-\x08\x0b\x0c\x0e-\x1f]')):
+    def _convert(self, value, _control_char_re=re.compile(r'[\x00-\x08\x0b\x0c\x0e-\x1f]')):
         if isinstance(value, datetime):
             return value.isoformat()
-        elif isinstance(value, (int, long, float, bool)):
+        elif isinstance(value, (int, float, bool)):
             return str(value)
         else:
             value = to_unicode(value) if isinstance(value, str) else value
@@ -73,14 +73,14 @@ class XMLSerializer(Serializer):
         if doc:
             doc.getroot().append(felement)
 
-        for k, v in fossil.iteritems():
+        for k, v in fossil.items():
             if k in ['_fossil', '_type', 'id']:
                 continue
             if isinstance(k, (int, float)) or (isinstance(k, basestring) and k.isdigit()):
                 elem = etree.SubElement(felement, 'entry', {'key': unicode(k)})
             else:
                 elem = etree.SubElement(felement, k)
-            if isinstance(v, dict) and set(v.viewkeys()) == {'date', 'time', 'tz'}:
+            if isinstance(v, dict) and set(v.keys()) == {'date', 'time', 'tz'}:
                 v = _deserialize_date(v)
             if isinstance(v, (list, tuple)):
                 onlyDicts = all(type(subv) == dict for subv in v)

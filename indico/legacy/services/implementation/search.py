@@ -63,7 +63,7 @@ class SearchUsers(SearchBase):
                       EventPerson.last_name: self._surName,
                       EventPerson.email: self._email,
                       EventPerson.affiliation: self._organisation}
-            criteria = [unaccent_match(col, val, exact=self._exactMatch) for col, val in fields.iteritems()]
+            criteria = [unaccent_match(col, val, exact=self._exactMatch) for col, val in fields.items()]
             event_persons = self._event.persons.filter(*criteria).all()
         fossilized_users = fossilize(sorted(users, key=lambda av: (av.getStraightFullName(), av.getEmail())))
         fossilized_event_persons = map(serialize_event_person, event_persons)

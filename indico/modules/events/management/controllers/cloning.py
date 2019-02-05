@@ -52,7 +52,7 @@ RRULE_FREQ_MAP = OrderedDict([
 
 
 def relativedelta_to_rrule_interval(rdelta):
-    for unit, freq in RRULE_FREQ_MAP.viewitems():
+    for unit, freq in RRULE_FREQ_MAP.items():
         value = getattr(rdelta, unit)
         if value:
             return freq, value
@@ -95,7 +95,7 @@ class CloneCalculator(object):
         if form.validate():
             return self._calculate(form)
         else:
-            raise ValueError([(unicode(getattr(form, k).label.text), v) for k, v in form.errors.viewitems()])
+            raise ValueError([(unicode(getattr(form, k).label.text), v) for k, v in form.errors.items()])
 
 
 class PatternCloneCalculator(CloneCalculator):

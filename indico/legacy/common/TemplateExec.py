@@ -67,9 +67,8 @@ class IndicoTemplateLookup(TemplateLookup):
 def _define_lookup():
     tpl_dir = os.path.join(get_root_path('indico'), 'legacy/webinterface/tpls')
     return IndicoTemplateLookup(directories=[tpl_dir],
-                                disable_unicode=True,
                                 input_encoding='utf-8',
-                                default_filters=['encode_if_unicode', 'str'],
+                                default_filters=['str'],
                                 filesystem_checks=True,
                                 imports=FILTER_IMPORTS,
                                 cache_enabled=True)
@@ -165,7 +164,7 @@ def truncateTitle(title, maxSize=30):
 def mako_call_template_hook(*name, **kwargs):
     from indico.web.flask.templating import call_template_hook
 
-    kwargs = {k: unicode(v, 'utf-8') if isinstance(v, str) else v for k, v in kwargs.iteritems()}
+    kwargs = {k: unicode(v, 'utf-8') if isinstance(v, str) else v for k, v in kwargs.items()}
     result = call_template_hook(*name, **kwargs)
     return result.encode('utf-8')
 

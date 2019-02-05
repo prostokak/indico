@@ -50,19 +50,19 @@ def get_rooms_conflicts(rooms, start_dt, end_dt, repeat_frequency, repeat_interv
         query = query.filter(~Reservation.id.in_(skip_conflicts_with))
 
     overlapping_occurrences = group_list(query, key=lambda obj: obj.reservation.room.id)
-    for room_id, occurrences in overlapping_occurrences.iteritems():
+    for room_id, occurrences in overlapping_occurrences.items():
         rooms_conflicts[room_id], rooms_pre_conflicts[room_id] = get_room_bookings_conflicts(candidates, occurrences,
                                                                                              skip_conflicts_with)
 
-    for room_id, occurrences in blocked_rooms.iteritems():
+    for room_id, occurrences in blocked_rooms.items():
         rooms_conflicts[room_id] += get_room_blockings_conflicts(room_id, candidates, occurrences)
 
     # TODO: do proper per-room override checks
     if not rb_is_admin(session.user):
-        for room_id, occurrences in nonbookable_periods.iteritems():
+        for room_id, occurrences in nonbookable_periods.items():
             rooms_conflicts[room_id] += get_room_nonbookable_periods_conflicts(candidates, occurrences)
 
-        for room_id, occurrences in unbookable_hours.iteritems():
+        for room_id, occurrences in unbookable_hours.items():
             rooms_conflicts[room_id] += get_room_unbookable_hours_conflicts(candidates, occurrences)
     return rooms_conflicts, rooms_pre_conflicts
 

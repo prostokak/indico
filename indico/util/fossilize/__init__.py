@@ -28,8 +28,7 @@ import inspect
 import logging
 import re
 import threading
-from itertools import ifilter
-from types import NoneType
+NoneType = type(None)
 
 import zope.interface
 
@@ -40,9 +39,6 @@ def fossilizes(*classList):
     """
     Simple wrapper around 'implements'
     """
-    zope.interface.declarations._implements("fossilizes",
-                                            classList,
-                                            zope.interface.classImplements)
 
 def addFossil(klazz, fossils):
     """
@@ -216,13 +212,13 @@ class Fossilizable(object):
                 return target
             elif ttype is dict:
                 container = {}
-                for key, value in target.iteritems():
+                for key, value in target.items():
                     container[key] = fossilize(value, interface, useAttrCache,
                                                **kwargs)
                 return container
             elif hasattr(target, '__iter__'):
                 if filterBy:
-                    iterator = ifilter(filterBy, target)
+                    iterator = filter(filterBy, target)
                 else:
                     iterator = iter(target)
                 # we turn sets and tuples into lists since JSON does not

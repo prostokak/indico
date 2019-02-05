@@ -113,7 +113,7 @@ class RHUserDashboard(RHUserBase):
         categories = get_related_categories(self.user)
         categories_events = []
         if categories:
-            category_ids = {c['categ'].id for c in categories.itervalues()}
+            category_ids = {c['categ'].id for c in categories.values()}
             today = now_utc(False).astimezone(tz).date()
             query = (Event.query
                      .filter(~Event.is_deleted,
@@ -130,7 +130,7 @@ class RHUserDashboard(RHUserBase):
         linked_events = [(event, {'management': bool(roles & self.management_roles),
                                   'reviewing': bool(roles & self.reviewer_roles),
                                   'attendance': bool(roles & self.attendance_roles)})
-                         for event, roles in get_linked_events(self.user, from_dt, 10).iteritems()]
+                         for event, roles in get_linked_events(self.user, from_dt, 10).items()]
         return WPUser.render_template('dashboard.html', 'dashboard',
                                       offset='{:+03d}:{:02d}'.format(hours, minutes), user=self.user,
                                       categories=categories,
@@ -367,7 +367,7 @@ class RHUsersAdmin(RHAdminBase):
             include_deleted = form_data.pop('include_deleted')
             include_pending = form_data.pop('include_pending')
             external = form_data.pop('external')
-            form_data = {k: v for (k, v) in form_data.iteritems() if v and v.strip()}
+            form_data = {k: v for (k, v) in form_data.items() if v and v.strip()}
             matches = search_users(exact=exact, include_deleted=include_deleted, include_pending=include_pending,
                                    external=external, allow_system_user=True, **form_data)
             for entry in matches:

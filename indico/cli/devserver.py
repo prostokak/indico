@@ -59,11 +59,11 @@ def run_cmd(info, host, port, url, ssl, ssl_key, ssl_cert, quiet, proxy, enable_
     })
 
     if os.environ.get('WERKZEUG_RUN_MAIN') != 'true':
-        print ' * Serving Indico on {}'.format(url)
+        print(' * Serving Indico on {}'.format(url))
         if evalex_whitelist:
-            print ' * Werkzeug debugger console on {}/console'.format(url)
+            print(' * Werkzeug debugger console on {}/console'.format(url))
             if evalex_whitelist is True:  # noqa
-                print ' * Werkzeug debugger console is available to all clients!'
+                print(' * Werkzeug debugger console is available to all clients!')
 
     try:
         from indico.core.config import get_config_path

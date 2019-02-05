@@ -41,8 +41,8 @@ class SurveyNumberField(NumberField, SurveyField):
         results = {'total': sum(counter.elements()),
                    'max': max(counter.elements()),
                    'min': min(counter.elements()),
-                   'absolute': OrderedDict(sorted(counter.iteritems())),
-                   'relative': OrderedDict((k, v / total_answers) for k, v in sorted(counter.iteritems()))}
+                   'absolute': OrderedDict(sorted(counter.items())),
+                   'relative': OrderedDict((k, v / total_answers) for k, v in sorted(counter.items()))}
         results['average'] = results['total'] / len(list(counter.elements()))
         return results
 

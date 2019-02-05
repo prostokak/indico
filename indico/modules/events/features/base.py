@@ -105,4 +105,4 @@ class EventFeature(object):
         this feature.
         """
         # This is not very efficient, but it runs exactly one on a not-very-large set
-        return {feature.name for feature in get_feature_definitions().itervalues() if cls.name in feature.requires_deep}
+        return {feature.name for feature in get_feature_definitions().values() if cls.name in feature.requires_deep}

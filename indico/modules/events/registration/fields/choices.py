@@ -126,7 +126,7 @@ class ChoiceBaseField(RegistrationFormBillableItemsField):
             unversioned_data.setdefault('default_item', None)
         for item in items:
             if 'id' not in item:
-                item['id'] = unicode(uuid4())
+                item['id'] = str(uuid4())
             item.setdefault('is_billable', False)
             item['price'] = float(item['price']) if item.get('price') else 0
             item['places_limit'] = int(item['places_limit']) if item.get('places_limit') else 0
@@ -198,7 +198,7 @@ class SingleChoiceField(ChoiceBaseField):
 
 
 def _hashable_choice(choice):
-    return frozenset(choice.iteritems())
+    return frozenset(choice.items())
 
 
 class MultiChoiceField(ChoiceBaseField):
@@ -216,7 +216,7 @@ class MultiChoiceField(ChoiceBaseField):
         reg_data = registration_data.data
         if not reg_data:
             return ''
-        choices = sorted(_format_item(uuid, number_of_slots) for uuid, number_of_slots in reg_data.iteritems())
+        choices = sorted(_format_item(uuid, number_of_slots) for uuid, number_of_slots in reg_data.items())
         return ', '.join(choices) if for_humans or for_search else choices
 
     def process_form_data(self, registration, value, old_data=None, billable_items_locked=False, new_data_version=None):
@@ -238,17 +238,17 @@ class MultiChoiceField(ChoiceBaseField):
             selected_choice_hashes.update({c['id']: _hashable_choice(c)
                                            for c in self.form_item.versioned_data['choices']
                                            if c['id'] in value and c['id'] not in selected_choice_hashes})
-            selected_choice_hashes = set(selected_choice_hashes.itervalues())
+            selected_choice_hashes = set(selected_choice_hashes.values())
             existing_version_hashes = {c['id']: _hashable_choice(c)
                                        for c in old_data.field_data.versioned_data['choices']}
             latest_version_hashes = {c['id']: _hashable_choice(c) for c in self.form_item.versioned_data['choices']}
-            deselected_ids = old_data.data.viewkeys() - value.viewkeys()
+            deselected_ids = old_data.data.keys() - value.keys()
             modified_deselected = any(latest_version_hashes.get(id_) != existing_version_hashes.get(id_)
                                       for id_ in deselected_ids)
-            if selected_choice_hashes <= set(latest_version_hashes.itervalues()):
+            if selected_choice_hashes <= set(latest_version_hashes.values()):
                 # all choices available in the latest version - upgrade to that version
                 return_value['field_data'] = self.form_item.current_data
-            elif not modified_deselected and selected_choice_hashes <= set(existing_version_hashes.itervalues()):
+            elif not modified_deselected and selected_choice_hashes <= set(existing_version_hashes.values()):
                 # all choices available in the previously selected version - stay with it
                 return_value['field_data'] = old_data.field_data
             else:
@@ -279,7 +279,7 @@ class MultiChoiceField(ChoiceBaseField):
         if not billable_items_locked:
             processed_data = super(MultiChoiceField, self).process_form_data(registration, value, old_data, False,
                                                                              return_value.get('field_data'))
-            return {key: return_value.get(key, value) for key, value in processed_data.iteritems()}
+            return {key: return_value.get(key, value) for key, value in processed_data.items()}
         # XXX: This code still relies on the client sending data for the disabled fields.
         # This is pretty ugly but especially in case of non-billable extra slots it makes
         # sense to keep it like this.  If someone tampers with the list of billable fields
@@ -287,9 +287,9 @@ class MultiChoiceField(ChoiceBaseField):
         if has_old_data:
             old_choices_mapping = {x['id']: x for x in old_data.field_data.versioned_data['choices']}
             new_choices_mapping = {x['id']: x for x in new_choices}
-            old_billable = {uuid: num for uuid, num in old_data.data.iteritems()
+            old_billable = {uuid: num for uuid, num in old_data.data.items()
                             if old_choices_mapping[uuid]['is_billable'] and old_choices_mapping[uuid]['price']}
-            new_billable = {uuid: num for uuid, num in value.iteritems()
+            new_billable = {uuid: num for uuid, num in value.items()
                             if new_choices_mapping[uuid]['is_billable'] and new_choices_mapping[uuid]['price']}
         if has_old_data and old_billable != new_billable:
             # preserve existing data
@@ -301,7 +301,7 @@ class MultiChoiceField(ChoiceBaseField):
             # check in the base method will fail)
             processed_data = super(MultiChoiceField, self).process_form_data(registration, value, old_data, True,
                                                                              return_value.get('field_data'))
-            return {key: return_value.get(key, value) for key, value in processed_data.iteritems()}
+            return {key: return_value.get(key, value) for key, value in processed_data.items()}
 
 
 def _to_machine_date(date):
@@ -325,7 +325,7 @@ class AccommodationField(RegistrationFormBillableItemsField):
         captions = dict(old_data['captions']) if old_data is not None else {}
         for item in items:
             if 'id' not in item:
-                item['id'] = unicode(uuid4())
+                item['id'] = str(uuid4())
             item.setdefault('is_billable', False)
             item['price'] = float(item['price']) if item.get('price') else 0
             item['places_limit'] = int(item['places_limit']) if item.get('places_limit') else 0

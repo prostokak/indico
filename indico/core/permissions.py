@@ -86,7 +86,7 @@ def get_permissions_info(_type):
         }
     }
 
-    selectable_permissions = {k: v for k, v in get_available_permissions(_type).viewitems() if v.user_selectable}
+    selectable_permissions = {k: v for k, v in get_available_permissions(_type).items() if v.user_selectable}
     special_permissions = {
         FULL_ACCESS_PERMISSION: {'title': _('Manage'), 'css_class': 'danger',
                                  'description': description_mapping[FULL_ACCESS_PERMISSION][_type]},
@@ -99,7 +99,7 @@ def get_permissions_info(_type):
             'description': special_permissions[FULL_ACCESS_PERMISSION]['description'],
             'children': {
                 perm.name: {'title': perm.friendly_name, 'description': perm.description}
-                for name, perm in selectable_permissions.viewitems()
+                for name, perm in selectable_permissions.items()
             }
         },
         READ_ACCESS_PERMISSION: {
@@ -111,7 +111,7 @@ def get_permissions_info(_type):
         'title': v.friendly_name,
         'css_class': 'permission-{}-{}'.format(_type.__name__.lower(), v.name),
         'description': v.description
-    } for k, v in selectable_permissions.viewitems()}, **special_permissions)
+    } for k, v in selectable_permissions.items()}, **special_permissions)
     return available_permissions, permissions_tree
 
 

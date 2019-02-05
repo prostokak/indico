@@ -122,7 +122,7 @@ def unify_user_args(fn):
     @wraps(fn)
     def wrapper(*args, **kwargs):
         args = map(_convert, args)
-        kwargs = {k: _convert(v) for k, v in kwargs.iteritems()}
+        kwargs = {k: _convert(v) for k, v in kwargs.items()}
         return fn(*args, **kwargs)
 
     return wrapper

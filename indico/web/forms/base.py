@@ -139,7 +139,7 @@ class IndicoForm(FlaskForm):
         field_id = request.args.get('__wtf_ajax')
         if not field_id:
             return False
-        field = next((f for f in self._fields.itervalues() if f.id == field_id and isinstance(f, AjaxFieldMixin)), None)
+        field = next((f for f in self._fields.values() if f.id == field_id and isinstance(f, AjaxFieldMixin)), None)
         if not field:
             return False
         rv = field.process_ajax()
@@ -185,13 +185,13 @@ class IndicoForm(FlaskForm):
             return True
 
         # Populate data from actual fields
-        for name, field in self._fields.iteritems():
+        for name, field in self._fields.items():
             if not _included(name):
                 continue
             field.populate_obj(obj, name)
 
         # Populate generated data
-        for name, value in self.generated_data.iteritems():
+        for name, value in self.generated_data.items():
             if not _included(name):
                 continue
             setattr(obj, name, value)
@@ -205,7 +205,7 @@ class IndicoForm(FlaskForm):
     def error_list(self):
         """A list containing all errors, prefixed with the field's label.'"""
         all_errors = []
-        for field_name, errors in self.errors.iteritems():
+        for field_name, errors in self.errors.items():
             for error in errors:
                 if isinstance(error, dict) and isinstance(self[field_name], FieldList):
                     for field in self[field_name].entries:
@@ -227,7 +227,7 @@ class IndicoForm(FlaskForm):
     def data(self):
         """Extends form.data with generated data from properties"""
         data = {k: v
-                for k, v in super(IndicoForm, self).data.iteritems()
+                for k, v in super(IndicoForm, self).data.items()
                 if k != self.meta.csrf_field_name and not k.startswith('ext__')}
         data.update(self.generated_data)
         return data
@@ -247,7 +247,7 @@ class FormDefaults(object):
 
     def __init__(self, obj=None, attrs=None, skip_attrs=None, **defaults):
         self.__obj = obj
-        self.__use_items = hasattr(obj, 'iteritems') and hasattr(obj, 'get')  # smells like a dict
+        self.__use_items = hasattr(obj, 'items') and hasattr(obj, 'get')  # smells like a dict
         self.__obj_attrs = attrs
         self.__obj_attrs_skip = skip_attrs
         self.__defaults = defaults

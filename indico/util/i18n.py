@@ -66,7 +66,7 @@ def gettext_unicode(*args, **kwargs):
     plugin_name = kwargs.pop('plugin_name', None)
     force_unicode = kwargs.pop('force_unicode', False)
 
-    if not isinstance(args[0], unicode):
+    if not isinstance(args[0], str):
         args = [(text.decode('utf-8') if isinstance(text, str) else text) for text in args]
         using_unicode = force_unicode
     else:
@@ -201,7 +201,7 @@ class IndicoTranslations(Translations):
         return ngettext(msgid1, msgid2, n)
 
 
-IndicoTranslations().install(unicode=True)
+IndicoTranslations().install()
 
 
 @babel.localeselector

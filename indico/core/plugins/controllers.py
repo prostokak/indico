@@ -36,7 +36,7 @@ class RHPluginsBase(RHAdminBase):
 
 class RHPlugins(RHPluginsBase):
     def _process(self):
-        plugins = [p for p in plugin_engine.get_active_plugins().viewvalues()]
+        plugins = [p for p in plugin_engine.get_active_plugins().values()]
         categories = defaultdict(list)
         other = []
         for plugin in plugins:

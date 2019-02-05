@@ -44,7 +44,7 @@ class ExtraUserPreferences(object):
 
     def extend_defaults(self, defaults):
         """Adds values to the FormDefaults."""
-        for key, value in self.load().iteritems():
+        for key, value in self.load().items():
             key = self._prefix + key
             if hasattr(defaults, key):
                 raise RuntimeError('Preference collision: {}'.format(key))
@@ -64,7 +64,7 @@ class ExtraUserPreferences(object):
     def extend_form(self, form_class):
         """Creates a subclass of the form containing the extra field"""
         form_class = type(b'ExtendedUserPreferencesForm', (form_class,), {})
-        for name, field in self.fields.iteritems():
+        for name, field in self.fields.items():
             name = self._prefix + name
             if hasattr(form_class, name):
                 raise RuntimeError('Preference collision: {}'.format(name))

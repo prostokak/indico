@@ -365,6 +365,6 @@ class RHVCRoomList(RHProtected):
                                  key=lambda r: r.event.start_dt.date(),
                                  sort_by=lambda r: r.event.start_dt,
                                  sort_reverse=reverse)
-            results = OrderedDict(sorted(results.viewitems(), key=itemgetter(0), reverse=reverse))
+            results = OrderedDict(sorted(results.items(), key=itemgetter(0), reverse=reverse))
         return WPVCService.render_template('vc_room_list.html', form=form, results=results,
                                            action=url_for('.vc_room_list'))

@@ -36,7 +36,7 @@ class PaperEmailSettingsField(JSONField):
         if valuelist:
             self.data = json.loads(valuelist[0])
             data = {}
-            for key, value in self.data.iteritems():
+            for key, value in self.data.items():
                 data[key] = RoleConverter.to_python(value) if isinstance(value, list) else value
             self.data = data
 

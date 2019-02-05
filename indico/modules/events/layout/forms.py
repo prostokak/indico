@@ -38,12 +38,12 @@ THEMES = [('', _('No theme selected')),
 
 
 def _get_timetable_theme_choices(event):
-    it = ((tid, data['title']) for tid, data in theme_settings.get_themes_for(event.type).viewitems())
+    it = ((tid, data['title']) for tid, data in theme_settings.get_themes_for(event.type).items())
     return sorted(it, key=lambda x: x[1].lower())
 
 
 def _get_conference_theme_choices():
-    plugin_themes = [(k, v[1]) for k, v in get_plugin_conference_themes().iteritems()]
+    plugin_themes = [(k, v[1]) for k, v in get_plugin_conference_themes().items()]
     return THEMES + sorted(plugin_themes, key=lambda x: x[1].lower())
 
 

@@ -152,11 +152,11 @@ def build_menu_structure(menu_id, active_item=None, **kwargs):
     top_level = set()
     sections = {}
 
-    for id_, section in named_objects_from_signal(signals.menu.sections.send(menu_id, **kwargs)).iteritems():
+    for id_, section in named_objects_from_signal(signals.menu.sections.send(menu_id, **kwargs)).items():
         sections[id_] = section
         top_level.add(section)
 
-    for id_, item in named_objects_from_signal(signals.menu.items.send(menu_id, **kwargs)).iteritems():
+    for id_, item in named_objects_from_signal(signals.menu.items.send(menu_id, **kwargs)).items():
         if id_ == active_item:
             item.active = True
         if item.section is None:

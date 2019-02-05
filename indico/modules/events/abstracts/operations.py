@@ -156,7 +156,7 @@ def update_abstract(abstract, abstract_data, custom_fields_data=None):
             'convert': lambda change: [t.name if t else None for t in change]
         }
     }
-    for field_name, change in changes.iteritems():
+    for field_name, change in changes.items():
         # we skip skip None -> '' changes (editing an abstract that
         # did not have a value for a new field yet without filling
         # it out)

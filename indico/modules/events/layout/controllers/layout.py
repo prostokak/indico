@@ -55,7 +55,7 @@ def _make_theme_settings_form(event, theme):
     except KeyError:
         return None
     form_class = type(b'ThemeSettingsForm', (IndicoForm,), {})
-    for name, field_data in settings.iteritems():
+    for name, field_data in settings.items():
         field_type = field_data['type']
         field_class = getattr(indico_fields, field_type, None) or getattr(wtforms_fields, field_type, None)
         if not field_class:
@@ -66,7 +66,7 @@ def _make_theme_settings_form(event, theme):
         field = field_class(label, validators, description=description, **field_data.get('kwargs', {}))
         setattr(form_class, name, field)
 
-    defaults = {name: field_data.get('defaults') for name, field_data in settings.iteritems()}
+    defaults = {name: field_data.get('defaults') for name, field_data in settings.items()}
     if theme == event.theme:
         defaults.update(layout_settings.get(event, 'timetable_theme_settings'))
 
@@ -120,7 +120,7 @@ class RHLayoutEdit(RHLayoutBase):
                 layout_settings.set(self.event, 'timetable_theme_settings', tt_theme_settings_form.data)
             else:
                 layout_settings.delete(self.event, 'timetable_theme_settings')
-            data = {unicode(key): value for key, value in form.data.iteritems() if key in layout_settings.defaults}
+            data = {unicode(key): value for key, value in form.data.items() if key in layout_settings.defaults}
             layout_settings.set_multi(self.event, data)
             if form.theme.data == '_custom':
                 layout_settings.set(self.event, 'use_custom_css', True)

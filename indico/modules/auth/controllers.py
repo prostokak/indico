@@ -289,7 +289,7 @@ class RHRegister(RH):
     def _prepare_registration_data(self, form, handler):
         email = form.email.data
         extra_emails = handler.get_all_emails(form) - {email}
-        user_data = {k: v for k, v in form.data.viewitems() if k in {'first_name', 'last_name', 'affiliation',
+        user_data = {k: v for k, v in form.data.items() if k in {'first_name', 'last_name', 'affiliation',
                                                                      'address', 'phone'}}
         user_data.update(handler.get_extra_user_data(form))
         identity_data = handler.get_identity_data(form)
@@ -353,7 +353,7 @@ class RHAccounts(RHUserBase):
             elif isinstance(form, EditLocalIdentityForm):
                 self._handle_edit_local_account(form)
             return redirect(url_for('auth.accounts'))
-        provider_titles = {name: provider.title for name, provider in multipass.identity_providers.iteritems()}
+        provider_titles = {name: provider.title for name, provider in multipass.identity_providers.items()}
         return WPAuthUser.render_template('accounts.html', 'accounts',
                                           form=form, user=self.user, provider_titles=provider_titles)
 
@@ -463,7 +463,7 @@ class MultipassRegistrationHandler(RegistrationHandler):
 
     def form(self, **kwargs):
         if self.from_sync_provider:
-            synced_values = {k: v or '' for k, v in self.identity_info['data'].iteritems()}
+            synced_values = {k: v or '' for k, v in self.identity_info['data'].items()}
             return MultipassRegistrationForm(synced_fields=multipass.synced_fields, synced_values=synced_values,
                                              **kwargs)
         else:

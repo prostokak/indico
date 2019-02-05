@@ -61,7 +61,7 @@ def _save_error(exc, title, message):
         return
     if not _is_error_reportable(exc):
         return
-    g.saved_error_uuid = uuid = unicode(uuid4())
+    g.saved_error_uuid = uuid = str(uuid4())
     # XXX: keep this outside - it must be called before `get_request_info()`
     # as that function may mess up `sys.exc_info()` in case accessing user
     # details fails

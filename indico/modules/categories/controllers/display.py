@@ -19,7 +19,7 @@ from __future__ import unicode_literals
 from datetime import date, datetime, time, timedelta
 from functools import partial
 from io import BytesIO
-from itertools import chain, groupby, imap
+from itertools import chain, groupby
 from math import ceil
 from operator import attrgetter, itemgetter
 from time import mktime
@@ -68,7 +68,7 @@ CALENDAR_COLOR_PALETTE = [
 
 
 def _flat_map(func, list_):
-    return chain.from_iterable(imap(func, list_))
+    return chain.from_iterable(map(func, list_))
 
 
 class RHCategoryIcon(RHDisplayCategoryBase):
@@ -118,19 +118,19 @@ class RHCategoryStatistics(RHDisplayCategoryBase):
             return self._get_stats_html(stats)
 
     def _plot_data(self, stats, tooltip=''):
-        years = sorted(stats.iterkeys())
+        years = sorted(stats.keys())
         min_year = now_utc().year
         max_year = min_year
         if years:
             min_year = min(min_year, years[0]) - 1
             max_year = max(max_year, years[-1])
-            data = {year: stats.get(year, 0) for year in xrange(min_year, max_year + 1)}
-            max_y = ceil(max(data.itervalues()) * 1.1)  # 1.1 for padding in the graph
+            data = {year: stats.get(year, 0) for year in range(min_year, max_year + 1)}
+            max_y = ceil(max(data.values()) * 1.1)  # 1.1 for padding in the graph
         else:
             data = {}
             max_y = 0
         return {'min_x': min_year, 'max_x': max_year, 'min_y': 0, 'max_y': max_y, 'values': data,
-                'total': sum(data.itervalues()), 'label_x': _("Years"), 'label_y': '', 'tooltip': tooltip}
+                'total': sum(data.values()), 'label_x': _("Years"), 'label_y': '', 'tooltip': tooltip}
 
     def _process_stats(self, stats, root=False):
         # tooltip formatting is for ease of translation
@@ -343,7 +343,7 @@ class RHDisplayCategory(RHDisplayCategoryEventsBase):
                   'past_event_count': past_event_count,
                   'show_past_events': show_past_events,
                   'past_threshold': past_threshold.strftime(threshold_format),
-                  'json_ld': map(serialize_event_for_json_ld, json_ld_events),
+                  'json_ld': list(map(serialize_event_for_json_ld, json_ld_events)),
                   'atom_feed_url': url_for('.export_atom', self.category),
                   'atom_feed_title': _('Events of "{}"').format(self.category.title)}
         params.update(get_base_ical_parameters(session.user, 'category',

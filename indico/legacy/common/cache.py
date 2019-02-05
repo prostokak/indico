@@ -14,12 +14,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Indico; if not, see <http://www.gnu.org/licenses/>.
 
-import cPickle as pickle
+import pickle
 import datetime
 import hashlib
 import os
 import time
-from itertools import izip
 
 import redis
 from flask import g
@@ -56,7 +55,7 @@ class CacheClient(object):
     The unit for the ttl arguments is a second.
     """
     def set_multi(self, mapping, ttl=0):
-        for key, val in mapping.iteritems():
+        for key, val in mapping.items():
             self.set(key, val, ttl)
 
     def get_multi(self, keys):
@@ -114,7 +113,7 @@ class RedisCacheClient(CacheClient):
 
     def set_multi(self, mapping, ttl=0):
         try:
-            self._client.mset(dict((k, pickle.dumps(v)) for k, v in mapping.iteritems()))
+            self._client.mset(dict((k, pickle.dumps(v)) for k, v in mapping.items()))
             if ttl:
                 for key in mapping:
                     self._client.expire(key, ttl)
@@ -297,7 +296,7 @@ class GenericCache(object):
         return hashlib.sha256(key).hexdigest()
 
     def _makeKey(self, key):
-        if not isinstance(key, basestring):
+        if not isinstance(key, str):
             # In case we get something not a string (number, list, whatever)
             key = repr(key)
         # Hashlib doesn't allow unicode so let's ensure it's not!
@@ -324,7 +323,7 @@ class GenericCache(object):
     def set_multi(self, mapping, time=0):
         self._connect()
         time = self._processTime(time)
-        mapping = dict(((self._makeKey(key), _NoneValue.replace(val)) for key, val in mapping.iteritems()))
+        mapping = dict(((self._makeKey(key), _NoneValue.replace(val)) for key, val in mapping.items()))
         self._client.set_multi(mapping, time)
 
     def get(self, key, default=None):
@@ -346,7 +345,7 @@ class GenericCache(object):
         # Get data in the same order as our keys
         sorted_data = (default if data[rk] is None else _NoneValue.restore(data[rk]) for rk in real_keys)
         if asdict:
-            return dict(izip(keys, sorted_data))
+            return dict(zip(keys, sorted_data))
         else:
             return list(sorted_data)
 

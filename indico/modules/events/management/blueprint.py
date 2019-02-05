@@ -56,7 +56,7 @@ _bp.add_url_rule('/print-poster/settings', 'poster_settings', posters.RHPosterPr
 _bp.add_url_rule('/print-poster/<int:template_id>/<uuid>', 'print_poster', posters.RHPrintEventPoster)
 
 
-for object_type, prefixes in event_management_object_url_prefixes.iteritems():
+for object_type, prefixes in event_management_object_url_prefixes.items():
     if object_type == 'subcontribution':
         continue
     for prefix in prefixes:

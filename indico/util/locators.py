@@ -16,7 +16,7 @@
 
 from __future__ import unicode_literals
 
-from UserDict import IterableUserDict, UserDict
+from collections import UserDict
 
 from werkzeug.utils import cached_property
 
@@ -89,7 +89,7 @@ def get_locator(obj):
         raise TypeError('{} does not contain a locator'.format(obj))
 
 
-class _LocatorDict(IterableUserDict, object):
+class _LocatorDict(UserDict, object):
     def __init__(self, locator, obj):
         # call to super constructor is omitted on purpose
         self._locator = locator

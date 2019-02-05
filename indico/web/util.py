@@ -130,10 +130,10 @@ class ExpectedError(ImATeapot):
 
 
 def _format_request_data(data, hide_passwords=False):
-    if not hasattr(data, 'iterlists'):
-        data = ((k, [v]) for k, v in data.iteritems())
+    if not hasattr(data, 'lists'):
+        data = ((k, [v]) for k, v in data.items())
     else:
-        data = data.iterlists()
+        data = data.lists()
     rv = {}
     for key, values in data:
         if hide_passwords and 'password' in key:
@@ -173,7 +173,7 @@ def get_request_info(hide_passwords=True):
         'rh': g.rh.__class__.__name__ if 'rh' in g else None,
         'user': user_info,
         'ip': request.remote_addr,
-        'user_agent': unicode(request.user_agent),
+        'user_agent': str(request.user_agent),
         'referrer': request.referrer,
         'data': {
             'url': _format_request_data(request.view_args) if request.view_args is not None else None,

@@ -72,7 +72,7 @@ def get_title_uuid(regform, title):
     if title_field is None:  # should never happen
         return None
     valid_choices = {x['id'] for x in title_field.current_data.versioned_data['choices']}
-    uuid = next((k for k, v in title_field.data['captions'].iteritems() if v == title), None)
+    uuid = next((k for k, v in title_field.data['captions'].items() if v == title), None)
     return {uuid: 1} if uuid in valid_choices else None
 
 
@@ -187,7 +187,7 @@ def create_personal_data_fields(regform):
                                                   is_required=pd_type.is_required)
         if not data.get('is_enabled', True):
             field.position = data['position']
-        for key, value in data.iteritems():
+        for key, value in data.items():
             setattr(field, key, value)
         field.data, versioned_data = field.field_impl.process_field_data(data.pop('data', {}))
         field.current_data = RegistrationFormFieldData(versioned_data=versioned_data)
@@ -225,7 +225,7 @@ def create_registration(regform, data, invitation=None, management=False, notify
             value = data.get(form_item.html_field_name)
         data_entry = RegistrationData()
         registration.data.append(data_entry)
-        for attr, value in form_item.field_impl.process_form_data(registration, value).iteritems():
+        for attr, value in form_item.field_impl.process_form_data(registration, value).items():
             setattr(data_entry, attr, value)
         if form_item.type == RegistrationFormItemType.field_pd and form_item.personal_data_type.column:
             setattr(registration, form_item.personal_data_type.column, value)
@@ -276,7 +276,7 @@ def modify_registration(registration, data, management=False, notify_user=True):
 
         attrs = field_impl.process_form_data(registration, value, data_by_field[form_item.id],
                                              billable_items_locked=billable_items_locked)
-        for key, val in attrs.iteritems():
+        for key, val in attrs.items():
             setattr(data_by_field[form_item.id], key, val)
         if form_item.type == RegistrationFormItemType.field_pd and form_item.personal_data_type.column:
             key = form_item.personal_data_type.column
@@ -324,7 +324,7 @@ def generate_spreadsheet_from_registrations(registrations, regform_items, static
         if item.input_type == 'accommodation':
             field_names.append(unique_col('{} ({})'.format(item.title, 'Arrival'), item.id))
             field_names.append(unique_col('{} ({})'.format(item.title, 'Departure'), item.id))
-    field_names.extend(title for name, (title, fn) in special_item_mapping.iteritems() if name in static_items)
+    field_names.extend(title for name, (title, fn) in special_item_mapping.items() if name in static_items)
     rows = []
     for registration in registrations:
         data = registration.data_by_field
@@ -344,7 +344,7 @@ def generate_spreadsheet_from_registrations(registrations, regform_items, static
                 registration_dict[key] = format_date(departure_date) if departure_date else ''
             else:
                 registration_dict[key] = data[item.id].friendly_data if item.id in data else ''
-        for name, (title, fn) in special_item_mapping.iteritems():
+        for name, (title, fn) in special_item_mapping.items():
             if name not in static_items:
                 continue
             value = fn(registration)

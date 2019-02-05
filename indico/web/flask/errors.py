@@ -67,7 +67,7 @@ def handle_unprocessableentity(exc):
 def handle_badrequestkeyerror(exc):
     if current_app.debug:
         raise
-    msg = _('Required argument missing: {}').format(to_unicode(exc.message))
+    msg = _('Required argument missing: {}').format(to_unicode(exc))
     return render_error(exc, exc.name, msg, exc.code)
 
 
@@ -87,12 +87,12 @@ def handle_http_exception(exc):
 
 @errors_bp.app_errorhandler(BadData)
 def handle_baddata(exc):
-    return render_error(exc, _('Invalid or expired token'), to_unicode(exc.message), 400)
+    return render_error(exc, _('Invalid or expired token'), to_unicode(exc), 400)
 
 
 @errors_bp.app_errorhandler(IndicoError)
 def handle_indico_exception(exc):
-    return render_error(exc, _('Something went wrong'), to_unicode(exc.message), getattr(exc, 'http_status_code', 500))
+    return render_error(exc, _('Something went wrong'), to_unicode(exc), getattr(exc, 'http_status_code', 500))
 
 
 @errors_bp.app_errorhandler(DatabaseError)
@@ -102,11 +102,11 @@ def handle_databaseerror(exc):
 
 @errors_bp.app_errorhandler(Exception)
 def handle_exception(exc, message=None):
-    Logger.get('flask').exception(to_unicode(exc.message) or 'Uncaught Exception')
+    Logger.get('flask').exception(str(exc) or 'Uncaught Exception')
     if not current_app.debug or request.is_xhr or request.is_json:
         sentry_log_exception()
         if message is None:
-            message = '{}: {}'.format(type(exc).__name__, to_unicode(exc.message))
+            message = '{}: {}'.format(type(exc).__name__, to_unicode(exc))
         return render_error(exc, _('Something went wrong'), message, 500)
     # Let the exception propagate to middleware /the webserver.
     # This triggers the Flask debugger in development and sentry

@@ -71,7 +71,7 @@ class Survey(db.Model):
         UUID,
         unique=True,
         nullable=False,
-        default=lambda: unicode(uuid4())
+        default=lambda: str(uuid4())
     )
     # An introduction text for users of the survey
     introduction = db.Column(
